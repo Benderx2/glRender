@@ -37,3 +37,27 @@ void texture::bind(unsigned int unit) {
   glActiveTexture(GL_TEXTURE0 + unit);
   glBindTexture(GL_TEXTURE_2D, texture_id);
 }
+
+void texture::draw_block(unsigned int x, unsigned int y, unsigned int w, unsigned int h) {
+  glEnable(GL_TEXTURE_2D);
+  bind(0);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_ONE, GL_ONE);
+
+  glBegin(GL_QUADS);
+
+  glTexCoord2f(0, 0);
+  glVertex3f(x, y, 0);
+  glTexCoord2f(0, 1);
+  glVertex3f(x, y + h, 0);
+  glTexCoord2f(1, 1);
+  glVertex3f(x + w, y + h, 0);
+  glTexCoord2f(1, 0);
+  glVertex3f(x + w, y, 0);
+
+  glEnd();
+
+  glDisable(GL_BLEND);
+  glDisable(GL_TEXTURE_2D);
+}

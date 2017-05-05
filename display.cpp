@@ -13,21 +13,13 @@ const color color::GREEN_DARK(0.0f, 0.9f, 0.0f);
 const color color::RED_DARK(0.9f, 0.0f, 0.0f);
 const color color::BLUE_DARK(0.0f, 0.0f, 0.9f);
 
-void display::calculate_fps(void) {
-  t_end = ticks();
-  frames += 1;
-  if(t_end - t_start > 1000) {
-    fps = frames;
-    t_start = ticks();
-    frames = 0;
-  }
-}
 display::display(int w, int h, const std::string& title) {
   t_start = ticks();
 
   if(SDL_Init(SDL_INIT_EVERYTHING)) {
     std::cerr << "SDL failed to initialise." << std::endl;
   }
+
   height = h;
   width = w;
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -40,6 +32,8 @@ display::display(int w, int h, const std::string& title) {
 
   gl_Window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_OPENGL);
   gl_Context = SDL_GL_CreateContext(gl_Window);
+
+  std::cout << "Created SDL Window with attributes: w: " << w << " h: " << h << " title: '" << title << "'" << std::endl;
 
   glGetIntegerv(GL_MAJOR_VERSION, &gl_major);
   glGetIntegerv(GL_MINOR_VERSION, &gl_minor);
@@ -82,8 +76,8 @@ void display::swap(void) {
   SDL_GL_SwapWindow(gl_Window);
 }
 
-uint32_t display::ticks(void) {
-  return SDL_GetTicks();
+unsigned int display::ticks(void) {
+  return (unsigned int)SDL_GetTicks();
 }
 
 bool display::closed(void) {
@@ -193,5 +187,15 @@ void display::culling(bool toggle) {
   } else {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
+  }
+}
+
+void display::calculate_fps(void) {
+  t_end = ticks();
+  frames += 1;
+  if(t_end - t_start > 1000) {
+    fps = frames;
+    t_start = ticks();
+    frames = 0;
   }
 }

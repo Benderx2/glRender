@@ -19,10 +19,38 @@ int scene::add_object(gameobject* object) {
   return RENDER_FAIL;
 }
 
+gameobject* scene::remove_object(const std::string& name) {
+  for(unsigned int i = 0; i < n_objects; i++) {
+    if(scene_objects[i] != NULL) {
+      if((*scene_objects[i]).get_name() == name) {
+        gameobject* ptr = scene_objects[i];
+        scene_objects[i] = NULL;
+        return ptr;
+      }
+    }
+  }
+  return NULL;
+}
+
+gameobject* scene::get_object_ptr(const std::string& name) {
+  for(unsigned int i = 0; i < n_objects; i++) {
+    if(scene_objects[i] != NULL) {
+      if((*scene_objects[i]).get_name() == name) {
+        return scene_objects[i];
+      }
+    }
+  }
+  return NULL;
+}
+
 void scene::draw(void) {
   for(unsigned int i = 0; i < n_objects; i++) {
     if(scene_objects[i] != NULL) {
       (*scene_objects[i]).draw(*scene_cam);
     }
   }
+}
+
+scene::~scene() {
+  free((void*)scene_objects);
 }

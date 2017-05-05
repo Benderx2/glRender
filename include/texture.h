@@ -11,6 +11,7 @@ public:
     // None
   }
   void bind(unsigned int unit);
+  void draw_block(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
   virtual ~texture();
 private:
   GLuint texture_id;

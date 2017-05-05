@@ -49,28 +49,37 @@ public:
   bool is3D;
   // Aspect Ratio
   float aspect;
+  // Frames per second
   float fps;
 
-  unsigned int frames;
-
   display(int w, int h, const std::string& title);
+
   void clear(color col, double alpha);
   void swap(void);
+
   void update(void);
-  uint32_t ticks(void);
+  unsigned int ticks(void);
+
   bool closed(void);
+
   unsigned int* getmousexy(void);
+
   unsigned int get_width(void);
   unsigned int get_height(void);
   float get_aspect(void);
+
   unsigned int get_fps(void);
+
   void culling(bool);
+
   virtual ~display();
 
 private:
   SDL_Window* gl_Window;
   SDL_GLContext gl_Context;
-  uint32_t t_start, t_end;
+
+  unsigned int t_start, t_end;
+  unsigned int frames;
 
   void calculate_fps(void);
 };

@@ -11,10 +11,11 @@ int main(void) {
   camera cam(glm::vec3(0,0,3), glm::vec3(0,0,-1), glm::vec3(0,1,0), 70.0f, dp.get_aspect(), 0.01f, 1000.0f);
 
   gameobject monkey("obj_monkey");
-  textrender text("data/glfont.png");
   shader shdr("shaders/shader3d", true);
   mesh msh("data/monkey.obj");
   texture tex("data/bricks.jpg");
+  texture tex02("data/glrender.png");
+  textrender text("data/glfont.png");
   transform t;
 
   // Set Mesh, Shader, Texture, and Transformation for the model..
@@ -40,8 +41,9 @@ int main(void) {
     monkey_scene.draw();
 
     engine_set_mode(dp, ENGINE_2D);
-
+    // 2D Drawing Code goes here...
     text.render("Hello, World! FPS: " + std::to_string(dp.get_fps()), 0, 0, 2.0f);
+    tex02.draw_block(dp.get_width() - 64, dp.get_height() - 64, 64, 64);
     // Do not forget to reset to 3D! (or just see what happens if you dont)
     engine_set_mode(dp, ENGINE_3D);
 
