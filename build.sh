@@ -6,27 +6,27 @@ export CPP="g++"
 COMPILE_START_TIME=$(date +%s.%N)
 
 printf "Compiling started:\nDisplay module...\n"
-$CPP $CPPFLAGS display.cpp -o display.o
+$CPP $CPPFLAGS src/display.cpp -o display.o
 printf "Main module...\n"
-$CPP $CPPFLAGS main.cpp -o main.o
+$CPP $CPPFLAGS src/main.cpp -o main.o
 printf "Shader module...\n"
-$CPP $CPPFLAGS shader.cpp -o shader.o
+$CPP $CPPFLAGS src/shader.cpp -o shader.o
 printf "Mesh module...\n"
-$CPP $CPPFLAGS mesh.cpp -o mesh.o
+$CPP $CPPFLAGS src/mesh.cpp -o mesh.o
 printf "Texture module...\n"
-$CPP $CPPFLAGS texture.cpp -o texture.o
+$CPP $CPPFLAGS src/texture.cpp -o texture.o
 printf "Object Loader module...\n"
-$CPP $CPPFLAGS obj_loader.cpp -o obj_loader.o
+$CPP $CPPFLAGS src/obj_loader.cpp -o obj_loader.o
 printf "GameObject Module...\n"
-$CPP $CPPFLAGS gameobject.cpp -o gameobject.o
+$CPP $CPPFLAGS src/gameobject.cpp -o gameobject.o
 printf "Scene Module...\n"
-$CPP $CPPFLAGS scene.cpp -o scene.o
+$CPP $CPPFLAGS src/scene.cpp -o scene.o
 printf "Text module...\n"
-$CPP $CPPFLAGS text.cpp -o text.o
+$CPP $CPPFLAGS src/text.cpp -o text.o
 printf "Public domain STB_IMAGE implementation...\n"
-$CPP $CPPFLAGS stb_image.c -o stb_image.o
+$CPP $CPPFLAGS src/stb_image.c -o stb_image.o
 printf "Linking to form executable...\n"
-$CPP main.o display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o -o engine $LDFLAGS
+$CPP main.o display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o -o ./bin/engine $LDFLAGS
 
 COMPILE_END_TIME=$(date +%s.%N)
 
