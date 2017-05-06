@@ -1,7 +1,6 @@
 #ifndef gameobject_h
 #define gameobject_h
 
-#include <display.h>
 #include <mesh.h>
 #include <transform.h>
 #include <shader.h>
@@ -29,6 +28,7 @@ public:
   inline void set_property(const transform& tfm) {
     obj_trans = tfm;
   }
+
   inline void set_property(void(*pdraw)(mesh&, shader&, texture&, transform&)) {
     predraw = pdraw;
   }
@@ -37,7 +37,7 @@ public:
   inline mesh& get_mesh() { return obj_msh; }
   inline transform& get_transform() { return obj_trans; }
   inline std::string& get_name() { return obj_name; }
-  
+
   void draw(const camera& cam);
 
 private:

@@ -1,5 +1,5 @@
 #!/bin/sh
-export CPPFLAGS="-I./include/ -std=c++11 -O3 -c"
+export CPPFLAGS="-I./include/ -std=c++11 -O3 -c -g"
 export LDFLAGS="-lSDL2 -lGL -lGLEW"
 export CPP="g++"
 

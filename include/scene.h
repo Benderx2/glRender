@@ -1,7 +1,6 @@
 #ifndef scene_h
 #define scene_h
 
-#include <display.h>
 #include <gameobject.h>
 #include <camera.h>
 
@@ -15,11 +14,12 @@ public:
   int add_object(gameobject* object);
 
   gameobject* get_object_ptr(const std::string& name);
+  camera* get_camera_ptr(void);
 
   void draw(void);
 
   virtual ~scene();
-  
+
 private:
   gameobject** scene_objects;
   camera* scene_cam;

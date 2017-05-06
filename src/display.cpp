@@ -59,6 +59,7 @@ display::display(int w, int h, const std::string& title) {
   rclick = false;
   is3D = true; // Engine starts in 3D mode.
   aspect = (float)width/(float)height;
+  frames = 0;
 }
 
 display::~display() {
@@ -72,7 +73,8 @@ void display::clear(color col, double alpha) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void display::swap(void) {
+void display::flush(void) {
+  glFlush();
   SDL_GL_SwapWindow(gl_Window);
 }
 
@@ -166,6 +168,14 @@ void display::update(void) {
       }
     }
   }
+  if(current_controller != NULL) {
+    if(k_up == true) (*current_controller).call_process(CONTROLLER_UP, 0.0f, 0.0f);
+    if(k_down == true) (*current_controller).call_process(CONTROLLER_DOWN, 0.0f, 0.0f);
+    if(k_left == true) (*current_controller).call_process(CONTROLLER_LEFT, 0.0f, 0.0f);
+    if(k_right == true) (*current_controller).call_process(CONTROLLER_RIGHT, 0.0f, 0.0f);
+    if(k_z == true) (*current_controller).call_process(CONTROLLER_Z, 0.0f, 0.0f);
+    if(k_x == true) (*current_controller).call_process(CONTROLLER_X, 0.0f, 0.0f);
+  }
 }
 unsigned int display::get_width(void) {
   return width;
@@ -188,6 +198,10 @@ void display::culling(bool toggle) {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
   }
+}
+
+void display::register_controller(controller* ctrl) {
+  current_controller = ctrl;
 }
 
 void display::calculate_fps(void) {

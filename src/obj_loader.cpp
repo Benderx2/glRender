@@ -102,7 +102,12 @@ IndexedModel OBJModel::ToIndexedModel()
         glm::vec3 currentNormal;
 
         if(hasUVs)
-            currentTexCoord = uvs[currentIndex->uvIndex];
+						if(currentIndex->uvIndex <= uvs.size())
+            	currentTexCoord = uvs[currentIndex->uvIndex];
+						else {
+							std::cout << "warning: uv index mapped out of range! assumed u=0; v=0;" << std::endl;
+							currentTexCoord = glm::vec2(0,0);
+						}
         else
             currentTexCoord = glm::vec2(0,0);
 
@@ -203,8 +208,12 @@ unsigned int OBJModel::FindLastVertexIndex(const std::vector<OBJIndex*>& indexLo
                     glm::vec3 currentNormal;
 
                     if(hasUVs)
-                        currentTexCoord = uvs[currentIndex->uvIndex];
-                    else
+												if(currentIndex->uvIndex <= uvs.size()) {
+                        	currentTexCoord = uvs[currentIndex->uvIndex];
+												} else {
+													currentTexCoord = glm::vec2(0,0);
+												}
+										else
                         currentTexCoord = glm::vec2(0,0);
 
                     if(hasNormals)

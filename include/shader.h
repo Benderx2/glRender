@@ -4,7 +4,6 @@
 #include <string>
 #include <GL/glew.h>
 #include <transform.h>
-#include <display.h>
 #include <camera.h>
 
 #define SHADER_VERTEX 0

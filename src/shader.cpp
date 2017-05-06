@@ -8,12 +8,10 @@ shader::shader(const std::string& name, bool mark_default) {
 
   shader_program = glCreateProgram();
 
-  std::cout << "Loading shader: '" << name << "' in memory." << std::endl;
+  std::cout << "Loading shader: '" << name << "'..." << std::endl;
 
   shaders[SHADER_VERTEX] = create_shader(load_shader(name + ".vx"), GL_VERTEX_SHADER);
   shaders[SHADER_PIXEL] = create_shader(load_shader(name + ".px"), GL_FRAGMENT_SHADER);
-
-  std::cout << "Shaders loaded. Compiling..." << std::endl;
 
   glAttachShader(shader_program, shaders[SHADER_VERTEX]);
   glAttachShader(shader_program, shaders[SHADER_PIXEL]);
@@ -33,7 +31,6 @@ shader::shader(const std::string& name, bool mark_default) {
     shader_uniforms[TRANSFORM_UFORM] = glGetUniformLocation(shader_program, "transform");
   }
 
-  std::cout << "Shaders Compiled, now in memory." << std::endl;
 }
 
 shader::~shader() {

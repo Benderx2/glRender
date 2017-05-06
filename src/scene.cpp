@@ -1,4 +1,5 @@
 #include <scene.h>
+#include <render_constant.h>
 
 scene::scene(unsigned int N) {
   scene_objects = (gameobject**)calloc(sizeof(gameobject*), N);
@@ -43,6 +44,9 @@ gameobject* scene::get_object_ptr(const std::string& name) {
   return NULL;
 }
 
+camera* scene::get_camera_ptr(void) {
+  return scene_cam;
+}
 void scene::draw(void) {
   for(unsigned int i = 0; i < n_objects; i++) {
     if(scene_objects[i] != NULL) {

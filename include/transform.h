@@ -19,15 +19,36 @@ public:
     inline glm::vec3& get_rotation() { return v_rot; }
     inline glm::vec3& get_scale() { return v_scale; }
 
+    inline void set_translation(float x, float y, float z) {
+      v_translate.x = x;
+      v_translate.y = y;
+      v_translate.z = z;
+    }
+
     inline void set_translation(glm::vec3& translation) {
       v_translate = translation;
     }
+
+    inline void set_rotation(float x, float y, float z) {
+      v_rot.x = x;
+      v_rot.y = y;
+      v_rot.z = z;
+    }
+
     inline void set_rotation(glm::vec3& rotation) {
       v_rot = rotation;
     }
+
+    inline void set_scale(float x, float y, float z) {
+      v_scale.x = x;
+      v_scale.y = y;
+      v_scale.z = z;
+    }
+
     inline void set_scale(glm::vec3& scale) {
       v_scale = scale;
     }
+    
     inline glm::mat4 get_matrix(void) const {
       glm::mat4 matrix_trans = glm::translate(v_translate);
       glm::mat4 matrix_scale = glm::scale(v_scale);

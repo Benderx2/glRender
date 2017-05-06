@@ -7,9 +7,8 @@
 
 #include <glm/glm.hpp>
 
-// A few constants
-#define RENDER_SUCCESS 0
-#define RENDER_FAIL 1
+#include <controller.h>
+
 
 class color {
 public:
@@ -55,7 +54,7 @@ public:
   display(int w, int h, const std::string& title);
 
   void clear(color col, double alpha);
-  void swap(void);
+  void flush(void);
 
   void update(void);
   unsigned int ticks(void);
@@ -72,11 +71,15 @@ public:
 
   void culling(bool);
 
+  void register_controller(controller* ctrl);
+
   virtual ~display();
 
 private:
   SDL_Window* gl_Window;
   SDL_GLContext gl_Context;
+
+  controller* current_controller;
 
   unsigned int t_start, t_end;
   unsigned int frames;

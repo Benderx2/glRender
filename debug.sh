@@ -1,0 +1,1 @@
+cd bin && gdb ./engine
