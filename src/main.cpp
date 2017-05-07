@@ -5,6 +5,8 @@ void monkey_predraw(mesh& msh, shader& shdr, texture& tex, transform& t);
 
 void controller_process(scene* s, controller_key k, float x, float y);
 
+bool start_rendering = false;
+
 int main(void) {
 
   display screen(640, 480, "glRender example");
@@ -56,11 +58,15 @@ int main(void) {
 
     // 3D Drawing Code goes here..
     // Draw our scene
-    monkey_scene.draw();
+    if(start_rendering == true)
+      monkey_scene.draw();
     // Switch to 2D rendering mode now
     engine_set_mode(screen, ENGINE_2D);
     // 2D Drawing Code goes here...
-    text.render("Hello, World! FPS: " + std::to_string(screen.get_fps()), 0, 0, 2.0f);
+    if(start_rendering == false)
+      text.render("Press Z to start rendering. Use arrow keys to rotate.", 150, 200, 1.0f);
+    else
+      text.render("FPS: " + std::to_string(screen.get_fps()), 0, 0, 1.0f);
     // Render our logo!
     tex02.draw_block(screen.get_width() - 64, screen.get_height() - 64, 64, 64);
     // Do not forget to reset to 3D! (or just see what happens if you dont)
@@ -88,5 +94,8 @@ void controller_process(scene* s, controller_key k, float x, float y) {
   }
   if(k == CONTROLLER_DOWN) {
     obj_monkey->get_transform().get_rotation().x += 0.1f;
+  }
+  if(k == CONTROLLER_Z) {
+    start_rendering = true;
   }
 }
