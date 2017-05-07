@@ -14,7 +14,8 @@ const color color::RED_DARK(0.9f, 0.0f, 0.0f);
 const color color::BLUE_DARK(0.0f, 0.0f, 0.9f);
 
 display::display(int w, int h, const std::string& title) {
-  t_start = ticks();
+
+  std::cout << "Initialising display..." << std::endl;
 
   if(SDL_Init(SDL_INIT_EVERYTHING)) {
     std::cerr << "SDL failed to initialise." << std::endl;
@@ -33,22 +34,24 @@ display::display(int w, int h, const std::string& title) {
   gl_Window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_OPENGL);
   gl_Context = SDL_GL_CreateContext(gl_Window);
 
-  std::cout << "Created SDL Window with attributes: w: " << w << " h: " << h << " title: '" << title << "'" << std::endl;
+  std::cout << "-- created SDL window with attributes: w: " << w << " h: " << h << " title: '" << title << "'" << std::endl;
 
   glGetIntegerv(GL_MAJOR_VERSION, &gl_major);
   glGetIntegerv(GL_MINOR_VERSION, &gl_minor);
 
-  std::cout << "GL Version: " << gl_major << "." << gl_minor << std::endl;
-  std::cout << "GL Initialisation complete. Creating glew instance..." << std::endl;
+  std::cout << "-- gl version: " << gl_major << "." << gl_minor << std::endl;
+  std::cout << "-- gl initialisation complete. creating glew instance..." << std::endl;
 
   glewExperimental = GL_TRUE;
   GLenum res = glewInit();
   if(res != GLEW_OK) {
-    std::cerr << "Glew failed to initialise." << std::endl;
+    std::cerr << "-- glew failed to initialise." << std::endl;
   }
 
-  std::cout << "GLEW initialised." << std::endl;
-  std::cout << "GLRender version: " << glRender_version << std::endl;
+  std::cout << "-- glew initialised." << std::endl;
+  std::cout << "-- glRender version: " << glRender_version << std::endl;
+
+  std::cout << "Display module initialised." << std::endl;
 
   has_quit = false;
   k_x = false; k_z = false; k_spc = false; k_up = false; k_down = false; k_left = false; k_right = false;
@@ -60,6 +63,7 @@ display::display(int w, int h, const std::string& title) {
   is3D = true; // Engine starts in 3D mode.
   aspect = (float)width/(float)height;
   frames = 0;
+  t_start = ticks();
 }
 
 display::~display() {

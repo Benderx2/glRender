@@ -23,10 +23,10 @@ shader::shader(const std::string& name, bool mark_default) {
   }
 
   glLinkProgram(shader_program);
-  check_error(shader_program, GL_LINK_STATUS, true, "Failed to link shader!");
+  check_error(shader_program, GL_LINK_STATUS, true, "-- failed to link shader! Log: \n");
 
   glValidateProgram(shader_program);
-  check_error(shader_program, GL_LINK_STATUS, true, "Failed to validate shader!");
+  check_error(shader_program, GL_LINK_STATUS, true, "-- failed to validate shader! Log: \n");
   if(mark_default) {
     shader_uniforms[TRANSFORM_UFORM] = glGetUniformLocation(shader_program, "transform");
   }

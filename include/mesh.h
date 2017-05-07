@@ -3,7 +3,10 @@
 
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <vector>
+
 #include <obj_loader.h>
+
 
 class vertex {
 public:

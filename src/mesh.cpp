@@ -18,7 +18,7 @@ mesh::mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx
 
 mesh::mesh(const std::string& name) {
   std::cout << "Loading mesh: '" << name << "' ..." << std::endl;
-  
+
   init_mesh(OBJModel(name).ToIndexedModel());
   mesh_name = name;
 }

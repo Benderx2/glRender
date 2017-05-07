@@ -54,7 +54,7 @@ int main(void) {
     screen.update();
 
     // Clear the screen
-    screen.clear(color::BLACK, 1.0f);
+    screen.clear(color::BLUE, 1.0f);
 
     // 3D Drawing Code goes here..
     // Draw our scene
