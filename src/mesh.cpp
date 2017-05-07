@@ -3,7 +3,7 @@
 #include <mesh.h>
 #include <shader_attribute.h>
 
-mesh::mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx) {
+mesh::mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m) {
   IndexedModel model;
   for(unsigned int i = 0; i < vcount; i++) {
     model.positions.push_back(*vp[i].get_pos());
@@ -13,12 +13,13 @@ mesh::mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx
   for(unsigned int i = 0; i < nidx; i++) {
     model.indices.push_back(idx[i]);
   }
+  mode = m;
   init_mesh(model);
 }
 
 mesh::mesh(const std::string& name) {
   std::cout << "Loading mesh: '" << name << "' ..." << std::endl;
-
+  mode = GL_TRIANGLES;
   init_mesh(OBJModel(name).ToIndexedModel());
   mesh_name = name;
 }
@@ -34,7 +35,7 @@ mesh::~mesh(void) {
 
 void mesh::draw(void) {
   glBindVertexArray(vertex_buffer_object);
-  glDrawElements(GL_TRIANGLES, vb_drawcount, GL_UNSIGNED_INT, 0);
+  glDrawElements(mode, vb_drawcount, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
   //std::cout << "Drawing mesh: " << mesh_name << std::endl;
 }

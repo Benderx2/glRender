@@ -15,6 +15,9 @@ public:
     this->texcord = texcord;
     this->normal = normal;
   }
+  vertex() {
+
+  }
   inline glm::vec3* get_pos(void) {
     return &pos;
   }
@@ -24,14 +27,14 @@ public:
   inline glm::vec3* get_normal(void) {
     return &normal;
   }
-private:
+
   glm::vec3 pos;
   glm::vec2 texcord;
   glm::vec3 normal;
 };
 class mesh {
 public:
-  mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx);
+  mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m);
   mesh(const std::string& name);
   mesh();
   virtual ~mesh(void);
@@ -44,6 +47,7 @@ private:
     NORMAL_VB,
     N_BUFFERS
   };
+  GLenum mode;
   GLuint vertex_buffer_object;
   GLuint vertex_buffers[N_BUFFERS];
   unsigned int vb_drawcount;

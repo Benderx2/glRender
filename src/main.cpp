@@ -1,5 +1,6 @@
 #include <iostream>
 #include <render.h>
+#include <primitives.h>
 
 void monkey_predraw(mesh& msh, shader& shdr, texture& tex, transform& t);
 
@@ -26,7 +27,6 @@ int main(void) {
   texture tex02("data/glrender.png");
   // Load up a basic textrenderer
   textrender text("data/glfont.png");
-
   // Set Mesh, Shader, Texture, and Transformation for the model..
   monkey.set_property(msh);
   monkey.set_property(shdr);
@@ -60,6 +60,7 @@ int main(void) {
     // Draw our scene
     if(start_rendering == true)
       monkey_scene.draw();
+
     // Switch to 2D rendering mode now
     engine_set_mode(screen, ENGINE_2D);
     // 2D Drawing Code goes here...

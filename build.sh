@@ -19,6 +19,8 @@ printf "Object Loader module...\n"
 $CPP $CPPFLAGS src/obj_loader.cpp -o obj_loader.o
 printf "GameObject Module...\n"
 $CPP $CPPFLAGS src/gameobject.cpp -o gameobject.o
+printf "Primitives Module...\n"
+$CPP $CPPFLAGS src/primitives.cpp -o primitives.o
 printf "Scene Module...\n"
 $CPP $CPPFLAGS src/scene.cpp -o scene.o
 printf "Text module...\n"
@@ -26,7 +28,7 @@ $CPP $CPPFLAGS src/text.cpp -o text.o
 printf "Public domain STB_IMAGE implementation...\n"
 $CPP $CPPFLAGS src/stb_image.c -o stb_image.o
 printf "Linking to form executable...\n"
-$CPP main.o display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o -o ./bin/engine $LDFLAGS
+$CPP main.o display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o primitives.o -o ./bin/engine $LDFLAGS
 
 COMPILE_END_TIME=$(date +%s.%N)
 
