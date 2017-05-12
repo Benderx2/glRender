@@ -10,8 +10,9 @@ typedef enum {
   CONTROLLER_LEFT,
   CONTROLLER_RIGHT,
   CONTROLLER_Z,
-  CONTROLLER_X
-
+  CONTROLLER_X,
+  CONTROLLER_MOUSE
+  
 } controller_key;
 
 class controller {

@@ -72,6 +72,7 @@ public:
   void culling(bool);
 
   void register_controller(controller* ctrl);
+  void set_mouse(int x, int y);
 
   virtual ~display();
 

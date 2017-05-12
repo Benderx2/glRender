@@ -1,2 +1,2 @@
 #!/bin/sh
-cd bin && ./engine
+cd bin && ./example01

@@ -17,6 +17,6 @@
 #include <primitives.h>
 
 // Version 0.25
-#define glRender_version 30
+#define glRender_version 35
 
 #endif

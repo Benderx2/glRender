@@ -30,7 +30,7 @@ shader::shader(const std::string& name, bool mark_default) {
   if(mark_default) {
     shader_uniforms[TRANSFORM_UFORM] = glGetUniformLocation(shader_program, "transform");
     if(shader_uniforms[TRANSFORM_UFORM] == -1)
-      std::cout << "--warning: uniform 'transform' missing for default marked shader." << std::endl;
+      std::cout << "-- warning: uniform 'transform' missing for default marked shader." << std::endl;
   }
 
 }

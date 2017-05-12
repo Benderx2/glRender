@@ -39,12 +39,12 @@ texture::texture(const std::string& px, const std::string& nx, const std::string
 
   std::string filenames[] = { px, nx, py, ny, pz, nz };
   for(int i = 0; i < 6; i++) {
-    std::cout << "--loading cube map: idx: " << i << " name: " << filenames[i] << std::endl;
+    std::cout << "-- loading cube map: idx: " << i << " name: " << filenames[i] << std::endl;
 
     int width, height, n_comp;
     unsigned char* image_data = stbi_load(filenames[i].c_str(), &width, &height, &n_comp, 4);
     if(image_data == NULL) {
-      std::cout << "--error loading cubemap: " << filenames[i] << std::endl;
+      std::cout << "-- error loading cubemap: " << filenames[i] << std::endl;
     }
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
 

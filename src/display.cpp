@@ -173,12 +173,13 @@ void display::update(void) {
     }
   }
   if(current_controller != NULL) {
-    if(k_up == true) (*current_controller).call_process(CONTROLLER_UP, 0.0f, 0.0f);
-    if(k_down == true) (*current_controller).call_process(CONTROLLER_DOWN, 0.0f, 0.0f);
-    if(k_left == true) (*current_controller).call_process(CONTROLLER_LEFT, 0.0f, 0.0f);
-    if(k_right == true) (*current_controller).call_process(CONTROLLER_RIGHT, 0.0f, 0.0f);
-    if(k_z == true) (*current_controller).call_process(CONTROLLER_Z, 0.0f, 0.0f);
-    if(k_x == true) (*current_controller).call_process(CONTROLLER_X, 0.0f, 0.0f);
+    if(k_up == true) current_controller->call_process(CONTROLLER_UP, 0.0f, 0.0f);
+    if(k_down == true) current_controller->call_process(CONTROLLER_DOWN, 0.0f, 0.0f);
+    if(k_left == true) current_controller->call_process(CONTROLLER_LEFT, 0.0f, 0.0f);
+    if(k_right == true) current_controller->call_process(CONTROLLER_RIGHT, 0.0f, 0.0f);
+    if(k_z == true) current_controller->call_process(CONTROLLER_Z, 0.0f, 0.0f);
+    if(k_x == true) current_controller->call_process(CONTROLLER_X, 0.0f, 0.0f);
+    if(mouse_moved == true) current_controller->call_process(CONTROLLER_MOUSE, mouse_x, mouse_y);
   }
 }
 unsigned int display::get_width(void) {
@@ -207,7 +208,9 @@ void display::culling(bool toggle) {
 void display::register_controller(controller* ctrl) {
   current_controller = ctrl;
 }
-
+void display::set_mouse(int x, int y) {
+  SDL_WarpMouseInWindow(gl_Window, x, y);
+}
 void display::calculate_fps(void) {
   t_end = ticks();
   frames += 1;

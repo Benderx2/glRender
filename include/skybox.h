@@ -12,6 +12,7 @@ public:
   skybox(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, float);
   void draw(camera);
 
+  virtual ~skybox();
 private:
   texture* skybox_cubemap;
   shader* skybox_shader;

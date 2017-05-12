@@ -1,1 +1,1 @@
-cd bin && gdb ./engine
+cd bin && gdb ./example01

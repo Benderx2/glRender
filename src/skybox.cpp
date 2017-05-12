@@ -74,10 +74,20 @@ void skybox::draw(camera cam) {
   skybox_shader->bind();
   skybox_shader->update(t, cam);
   skybox_cubemap->bind(0);
+  // Disable depth masking for now
   glDepthMask(GL_FALSE);
+  // Finally draw our skybox
   glBindVertexArray(VAO);
   skybox_shader->set_uniform("skybox", 0);
   glDrawArrays(GL_TRIANGLES, 0, 36);
+  // unbind vertex array
   glBindVertexArray(0);
   glDepthMask(GL_TRUE);
+}
+
+skybox::~skybox() {
+  delete skybox_shader;
+  delete skybox_cubemap;
+  glDeleteBuffers(1, &VBO);
+  glDeleteVertexArrays(1, &VAO);
 }

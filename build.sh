@@ -1,14 +1,14 @@
 #!/bin/sh
 export CPPFLAGS="-I./include/ -std=c++11 -O3 -c -g"
-export LDFLAGS="-lSDL2 -lGL -lGLEW"
+export LDFLAGS="./lib/glRender.a -lSDL2 -lGL -lGLEW"
 export CPP="g++"
+export AR="ar"
+export ARFLAGS="rvs"
 
 COMPILE_START_TIME=$(date +%s.%N)
 
 printf "Compiling started:\nDisplay module...\n"
 $CPP $CPPFLAGS src/display.cpp -o display.o
-printf "Main module...\n"
-$CPP $CPPFLAGS src/main.cpp -o main.o
 printf "Skybox module...\n"
 $CPP $CPPFLAGS src/skybox.cpp -o skybox.o
 printf "Shader module...\n"
@@ -29,9 +29,13 @@ printf "Text module...\n"
 $CPP $CPPFLAGS src/text.cpp -o text.o
 printf "Public domain STB_IMAGE implementation...\n"
 $CPP $CPPFLAGS src/stb_image.c -o stb_image.o
-printf "Linking to form executable...\n"
-$CPP main.o display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o primitives.o skybox.o -o ./bin/engine $LDFLAGS
+printf "Creating static library...\n"
+$AR $ARFLAGS ./lib/glRender.a display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o primitives.o skybox.o
+printf "Compiling example...\n"
+$CPP $CPPFLAGS ./examples/example01.cpp -o example01.o
+$CPP example01.o -o ./bin/example01 $LDFLAGS
 
+printf "Finished"
 COMPILE_END_TIME=$(date +%s.%N)
 
 TOTAL_TIME_TAKEN=$(echo "$COMPILE_END_TIME - $COMPILE_START_TIME" | bc)
@@ -41,4 +45,4 @@ printf "Cleaning object files...\n"
 
 rm *.o
 
-printf "Cleaned. Run ./engine to test!\n"
+printf "Cleaned. Run ./test.sh to test!\n"
