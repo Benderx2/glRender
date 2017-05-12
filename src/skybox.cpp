@@ -70,12 +70,13 @@ void skybox::draw(camera cam) {
   // Identity transformation
   transform t;
   t.get_scale() = glm::vec3(scale, scale, scale);
+  // Bind our skybox shader and update it with the transform and camera
   skybox_shader->bind();
   skybox_shader->update(t, cam);
   skybox_cubemap->bind(0);
   glDepthMask(GL_FALSE);
   glBindVertexArray(VAO);
-  glUniform1i(glGetUniformLocation(skybox_shader->get_shader_program(), "skybox"), 0);
+  skybox_shader->set_uniform("skybox", 0);
   glDrawArrays(GL_TRIANGLES, 0, 36);
   glBindVertexArray(0);
   glDepthMask(GL_TRUE);

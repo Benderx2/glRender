@@ -23,6 +23,8 @@ public:
   void update(const transform& t, const camera& cam);
   void bind(void);
 
+  void set_uniform(const std::string& name, int i);
+  void set_uniform(const std::string& name, float f);
   void set_uniform(const std::string& name, glm::vec2 v);
   void set_uniform(const std::string& name, glm::vec3 v);
   void set_uniform(const std::string& name, glm::vec4 v);

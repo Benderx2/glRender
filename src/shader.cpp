@@ -111,12 +111,16 @@ void shader::update(const transform& t, const camera& cam) {
 }
 
 void shader::set_uniform(const std::string& name, glm::vec2 v) {
-  GLuint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  if(uniform_loc == -1)
+    std::cout << "warning: uniform not found: " << name << std::endl;
   glUniform2fv(uniform_loc, 1, &v[0]);
 }
 
 void shader::set_uniform(const std::string& name, glm::vec3 v) {
-  GLuint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  if(uniform_loc == -1)
+    std::cout << "warning: uniform not found: " << name << std::endl;
   glUniform3fv(uniform_loc, 1, &v[0]);
 }
 
@@ -132,4 +136,18 @@ void shader::set_uniform(const std::string& name, glm::mat4 m) {
   if(uniform_loc == -1)
     std::cout << "warning: uniform not found: " << name << std::endl;
   glUniformMatrix4fv(uniform_loc, 1, GL_FALSE, &m[0][0]);
+}
+
+void shader::set_uniform(const std::string& name, int i) {
+  GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  if(uniform_loc == -1)
+    std::cout << "warning: uniform not found: " << name << std::endl;
+  glUniform1i(uniform_loc, i);
+}
+
+void shader::set_uniform(const std::string& name, float f) {
+  GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  if(uniform_loc == -1)
+    std::cout << "warning: uniform not found: " << name << std::endl;
+  glUniform1f(uniform_loc, f);
 }
