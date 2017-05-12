@@ -1,8 +1,7 @@
 #include <iostream>
 #include <render.h>
-#include <primitives.h>
 
-void monkey_predraw(mesh& msh, shader& shdr, texture& tex, transform& t);
+void predraw(mesh& msh, shader& shdr, texture& tex, transform& t);
 
 void controller_process(scene* s, controller_key k, float x, float y);
 
@@ -16,34 +15,35 @@ int main(void) {
 
   camera cam(glm::vec3(0,0,3), glm::vec3(0,0,-1), glm::vec3(0,1,0), 70.0f, screen.get_aspect(), 0.01f, 1000.0f);
 
-  // Create gameobject called "obj_monkey"
-  gameobject monkey("obj_monkey");
+  // Create gameobject called "obj01"
+  gameobject terrain("obj_terrain");
+  skybox sky("shaders/shader_sky", "data/sky/siege_rt.tga", "data/sky/siege_lf.tga", "data/sky/siege_up.tga", "data/sky/siege_dn.tga", "data/sky/siege_bk.tga", "data/sky/siege_ft.tga", 10.0f);
   // Shader, mesh, transformation and texture objects for our monkey
   shader shdr("shaders/shader3d", true);
-  mesh msh("data/monkey.obj");
-  texture tex("data/bricks.jpg");
+  mesh msh("data/terrain.obj");
+  texture tex("data/grass.jpg");
   transform t;
   // Our glrender logo
   texture tex02("data/glrender.png");
   // Load up a basic textrenderer
   textrender text("data/glfont.png");
   // Set Mesh, Shader, Texture, and Transformation for the model..
-  monkey.set_property(msh);
-  monkey.set_property(shdr);
-  monkey.set_property(tex);
-  monkey.set_property(t);
+  terrain.set_property(msh);
+  terrain.set_property(shdr);
+  terrain.set_property(tex);
+  terrain.set_property(t);
 
   // Also our "predraw" function which is called every frame before drawing...
-  monkey.set_property(monkey_predraw);
+  terrain.set_property(predraw);
 
   // Create a scene with 1 object
-  scene monkey_scene(1);
-  // Add the camera and the only object
-  monkey_scene.add_camera(&cam);
-  monkey_scene.add_object(&monkey);
-
+  scene my_scene(1);
+  // Add the camera and the only object and the skybox
+  my_scene.add_camera(&cam);
+  my_scene.add_object(&terrain);
+  my_scene.add_skybox(&sky);
   // Create a controller for the scene
-  controller sample_controller(&monkey_scene);
+  controller sample_controller(&my_scene);
   // Set our callback
   sample_controller.set_callback(controller_process);
   // Finally register the controller
@@ -58,9 +58,9 @@ int main(void) {
 
     // 3D Drawing Code goes here..
     // Draw our scene
-    if(start_rendering == true)
-      monkey_scene.draw();
-
+    if(start_rendering == true) {
+      my_scene.draw();
+    }
     // Switch to 2D rendering mode now
     engine_set_mode(screen, ENGINE_2D);
     // 2D Drawing Code goes here...
@@ -78,23 +78,23 @@ int main(void) {
   return 0;
 }
 
-void monkey_predraw(mesh& msh, shader& shdr, texture& tex, transform& t) {
+void predraw(mesh& msh, shader& shdr, texture& tex, transform& t) {
   shdr.set_uniform("lightdir", glm::vec3(0,0,1));
 }
 
 void controller_process(scene* s, controller_key k, float x, float y) {
-  gameobject* obj_monkey = (*s).get_object_ptr("obj_monkey");
+  gameobject* obj01 = (*s).get_object_ptr("obj_terrain");
   if(k == CONTROLLER_LEFT) {
-    obj_monkey->get_transform().get_rotation().y -= 0.1f;
+    obj01->get_transform().get_rotation().y -= 0.1f;
   }
   if(k == CONTROLLER_RIGHT) {
-    obj_monkey->get_transform().get_rotation().y += 0.1f;
+    obj01->get_transform().get_rotation().y += 0.1f;
   }
   if(k == CONTROLLER_UP) {
-    obj_monkey->get_transform().get_rotation().x -= 0.1f;
+    obj01->get_transform().get_rotation().x -= 0.1f;
   }
   if(k == CONTROLLER_DOWN) {
-    obj_monkey->get_transform().get_rotation().x += 0.1f;
+    obj01->get_transform().get_rotation().x += 0.1f;
   }
   if(k == CONTROLLER_Z) {
     start_rendering = true;

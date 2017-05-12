@@ -4,6 +4,7 @@
 #include <stb_image.h>
 
 texture::texture(const std::string& name) {
+  type = TEXTURE_TEXTURE2D;
   int width, height, n_comp;
 
   std::cout << "Loading texture: '" << name << "' ..." << std::endl;
@@ -28,6 +29,36 @@ texture::texture(const std::string& name) {
   stbi_image_free(image_data);
 }
 
+// Cubemap constructor
+texture::texture(const std::string& px, const std::string& nx, const std::string& py, const std::string& ny, const std::string& pz, const std::string& nz) {
+  type = TEXTURE_CUBEMAP;
+  glGenTextures(1, &texture_id);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
+
+  std::cout << "Loading cubemap..." << std::endl;
+
+  std::string filenames[] = { px, nx, py, ny, pz, nz };
+  for(int i = 0; i < 6; i++) {
+    std::cout << "--loading cube map: idx: " << i << " name: " << filenames[i] << std::endl;
+
+    int width, height, n_comp;
+    unsigned char* image_data = stbi_load(filenames[i].c_str(), &width, &height, &n_comp, 4);
+    if(image_data == NULL) {
+      std::cout << "--error loading cubemap: " << filenames[i] << std::endl;
+    }
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+
+    stbi_image_free(image_data);
+  }
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+  glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+}
+// Destructor
 texture::~texture() {
   glDeleteTextures(1, &texture_id);
 }
@@ -35,7 +66,10 @@ texture::~texture() {
 void texture::bind(unsigned int unit) {
   assert(unit >= 0 && unit <= 31);
   glActiveTexture(GL_TEXTURE0 + unit);
-  glBindTexture(GL_TEXTURE_2D, texture_id);
+  if(type == TEXTURE_TEXTURE2D)
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+  else if(type == TEXTURE_CUBEMAP)
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
 }
 
 void texture::draw_block(unsigned int x, unsigned int y, unsigned int w, unsigned int h) {

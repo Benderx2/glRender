@@ -29,6 +29,8 @@ shader::shader(const std::string& name, bool mark_default) {
   check_error(shader_program, GL_LINK_STATUS, true, "-- failed to validate shader! Log: \n");
   if(mark_default) {
     shader_uniforms[TRANSFORM_UFORM] = glGetUniformLocation(shader_program, "transform");
+    if(shader_uniforms[TRANSFORM_UFORM] == -1)
+      std::cout << "--warning: uniform 'transform' missing for default marked shader." << std::endl;
   }
 
 }
@@ -119,11 +121,15 @@ void shader::set_uniform(const std::string& name, glm::vec3 v) {
 }
 
 void shader::set_uniform(const std::string& name, glm::vec4 v) {
-  GLuint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  if(uniform_loc == -1)
+    std::cout << "warning: uniform not found: " << name << std::endl;
   glUniform4fv(uniform_loc, 1, &v[0]);
 }
 
 void shader::set_uniform(const std::string& name, glm::mat4 m) {
-  GLuint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
+  if(uniform_loc == -1)
+    std::cout << "warning: uniform not found: " << name << std::endl;
   glUniformMatrix4fv(uniform_loc, 1, GL_FALSE, &m[0][0]);
 }

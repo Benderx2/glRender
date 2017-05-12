@@ -9,6 +9,8 @@ printf "Compiling started:\nDisplay module...\n"
 $CPP $CPPFLAGS src/display.cpp -o display.o
 printf "Main module...\n"
 $CPP $CPPFLAGS src/main.cpp -o main.o
+printf "Skybox module...\n"
+$CPP $CPPFLAGS src/skybox.cpp -o skybox.o
 printf "Shader module...\n"
 $CPP $CPPFLAGS src/shader.cpp -o shader.o
 printf "Mesh module...\n"
@@ -28,7 +30,7 @@ $CPP $CPPFLAGS src/text.cpp -o text.o
 printf "Public domain STB_IMAGE implementation...\n"
 $CPP $CPPFLAGS src/stb_image.c -o stb_image.o
 printf "Linking to form executable...\n"
-$CPP main.o display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o primitives.o -o ./bin/engine $LDFLAGS
+$CPP main.o display.o shader.o mesh.o texture.o gameobject.o obj_loader.o stb_image.o scene.o text.o primitives.o skybox.o -o ./bin/engine $LDFLAGS
 
 COMPILE_END_TIME=$(date +%s.%N)
 

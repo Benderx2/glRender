@@ -46,7 +46,7 @@ private:
     N_UFORMS
   };
 
-  GLuint shader_uniforms[N_UFORMS];
+  GLint shader_uniforms[N_UFORMS];
   GLuint shader_program;
   static const unsigned int N_SHADERS = 2;
   GLuint shaders[N_SHADERS];

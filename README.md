@@ -1,6 +1,6 @@
 # glRender
 
-![glRender screenshot](http://i.imgur.com/vhsdrrk.png)
+![glRender screenshot](http://i.imgur.com/TYTppHP.png)
 
 glRender is a WIP 3D rendering library that is mostly intended to be a learning experience.
 

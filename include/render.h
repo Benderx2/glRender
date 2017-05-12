@@ -14,8 +14,9 @@
 #include <gameobject.h>
 #include <text.h>
 #include <controller.h>
+#include <primitives.h>
 
 // Version 0.25
-#define glRender_version 25
+#define glRender_version 30
 
 #endif

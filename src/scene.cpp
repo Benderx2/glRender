@@ -19,7 +19,9 @@ int scene::add_object(gameobject* object) {
   }
   return RENDER_FAIL;
 }
-
+int scene::add_skybox(skybox* sky) {
+  scene_skybox = sky;
+}
 gameobject* scene::remove_object(const std::string& name) {
   for(unsigned int i = 0; i < n_objects; i++) {
     if(scene_objects[i] != NULL) {
@@ -48,6 +50,9 @@ camera* scene::get_camera_ptr(void) {
   return scene_cam;
 }
 void scene::draw(void) {
+  if(scene_skybox != NULL)
+    scene_skybox->draw(*scene_cam);
+    
   for(unsigned int i = 0; i < n_objects; i++) {
     if(scene_objects[i] != NULL) {
       (*scene_objects[i]).draw(*scene_cam);

@@ -5,5 +5,4 @@
 #define ATTRIBUTE_TEXCORD 1
 #define ATTRIBUTE_NORMAL 2
 
-
 #endif

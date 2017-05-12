@@ -9,6 +9,7 @@
 
 class gameobject {
 public:
+
   void (*predraw)(mesh& msh, shader& shdr, texture& tex, transform& t) = NULL;
 
   inline gameobject(const std::string& name) {
@@ -41,6 +42,7 @@ public:
   void draw(const camera& cam);
 
 private:
+  
   // Transformations
   transform obj_trans;
   // Object meshses, shaders and textures
