@@ -8,10 +8,10 @@
 #include <display.h>
 
 
-class textrender {
+class TextRender {
 public:
-  textrender(const std::string& font);
-  void render(const std::string& str, int x, int y, float scale);
+  TextRender(const std::string& font);
+  void Render(const std::string& str, int x, int y, float scale);
 private:
   int box_w, box_h;
   GLuint tex;

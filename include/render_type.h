@@ -3,6 +3,13 @@
 
 // Architecture specific header, might be rewritten for other arcs!
 #include <stdint.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+
+typedef glm::vec4 vector4;
+typedef glm::vec3 vector3;
+typedef glm::vec2 vector2;
+typedef glm::mat4 matrix4;
 
 typedef uint8_t u8;
 typedef uint16_t u16;

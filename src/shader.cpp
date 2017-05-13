@@ -4,38 +4,38 @@
 #include <shader_attribute.h>
 
 // The is3D boolean determines whether to mark the position, texcord and normal attributes.
-shader::shader(const std::string& name, bool mark_default) {
+Shader::Shader(const std::string& name, bool mark_default) {
 
   shader_program = glCreateProgram();
 
   std::cout << "Loading shader: '" << name << "'..." << std::endl;
 
-  shaders[SHADER_VERTEX] = create_shader(load_shader(name + ".vx"), GL_VERTEX_SHADER);
-  shaders[SHADER_PIXEL] = create_shader(load_shader(name + ".px"), GL_FRAGMENT_SHADER);
+  shaders[SHADER_VERTEX] = CreateShader(LoadShader(name + ".vx"), GL_VERTEX_SHADER);
+  shaders[SHADER_PIXEL] = CreateShader(LoadShader(name + ".px"), GL_FRAGMENT_SHADER);
 
   glAttachShader(shader_program, shaders[SHADER_VERTEX]);
   glAttachShader(shader_program, shaders[SHADER_PIXEL]);
 
   if(mark_default) {
-    mark_attribute(ATTRIBUTE_POSITION, "position");
-    mark_attribute(ATTRIBUTE_TEXCORD, "texCoord");
-    mark_attribute(ATTRIBUTE_NORMAL, "normal");
+    MarkAttribute(ATTRIBUTE_POSITION, "position");
+    MarkAttribute(ATTRIBUTE_TEXCORD, "texCoord");
+    MarkAttribute(ATTRIBUTE_NORMAL, "normal");
   }
 
   glLinkProgram(shader_program);
-  check_error(shader_program, GL_LINK_STATUS, true, "-- failed to link shader! Log: \n");
+  CheckErr(shader_program, GL_LINK_STATUS, true, "-- failed to link shader! Log: \n");
 
   glValidateProgram(shader_program);
-  check_error(shader_program, GL_LINK_STATUS, true, "-- failed to validate shader! Log: \n");
+  CheckErr(shader_program, GL_LINK_STATUS, true, "-- failed to validate shader! Log: \n");
+
   if(mark_default) {
     shader_uniforms[TRANSFORM_UFORM] = glGetUniformLocation(shader_program, "transform");
     if(shader_uniforms[TRANSFORM_UFORM] == -1)
       std::cout << "-- warning: uniform 'transform' missing for default marked shader." << std::endl;
   }
-
 }
 
-shader::~shader() {
+Shader::~Shader() {
   glDetachShader(shader_program, shaders[SHADER_VERTEX]);
   glDeleteShader(shaders[SHADER_VERTEX]);
   glDetachShader(shader_program, shaders[SHADER_PIXEL]);
@@ -43,11 +43,11 @@ shader::~shader() {
   glDeleteProgram(shader_program);
 }
 
-void shader::bind(void) {
+void Shader::Bind(void) {
   glUseProgram(shader_program);
 }
 
-std::string shader::load_shader(const std::string& name) {
+std::string Shader::LoadShader(const std::string& name) {
   std::ifstream file;
   file.open(name.c_str());
 
@@ -65,7 +65,7 @@ std::string shader::load_shader(const std::string& name) {
   return output;
 }
 
-void shader::check_error(GLuint shader, GLuint flag, bool is_program, const std::string& error_msg) {
+void Shader::CheckErr(GLuint shader, GLuint flag, bool is_program, const std::string& error_msg) {
   GLint success = 0;
   GLchar error[1024] = { 0 };
 
@@ -84,7 +84,7 @@ void shader::check_error(GLuint shader, GLuint flag, bool is_program, const std:
   }
 }
 
-GLuint shader::create_shader(const std::string& text, unsigned int type) {
+GLuint Shader::CreateShader(const std::string& text, unsigned int type) {
   GLuint shader = glCreateShader(type);
 
   if(shader == 0)
@@ -99,53 +99,53 @@ GLuint shader::create_shader(const std::string& text, unsigned int type) {
   glShaderSource(shader, 1, p, lengths);
   glCompileShader(shader);
 
-  check_error(shader, GL_COMPILE_STATUS, false, "Shader compilation failed!");
+  CheckErr(shader, GL_COMPILE_STATUS, false, "Shader compilation failed!");
 
   return shader;
 }
 
-void shader::update(const transform& t, const camera& cam) {
-  glm::mat4 model_matrix = cam.get_matrix() * t.get_matrix();
+void Shader::Update(const Transform& t, const Camera& cam) {
+  glm::mat4 model_matrix = cam.GetMatrix() * t.GetMatrix();
   glUniformMatrix4fv(shader_uniforms[TRANSFORM_UFORM], 1, GL_FALSE, &model_matrix[0][0]);
   // write the transform matrix to the uniform,
 }
 
-void shader::set_uniform(const std::string& name, glm::vec2 v) {
+void Shader::SetUniform(const std::string& name, vector2 v) {
   GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
   if(uniform_loc == -1)
     std::cout << "warning: uniform not found: " << name << std::endl;
   glUniform2fv(uniform_loc, 1, &v[0]);
 }
 
-void shader::set_uniform(const std::string& name, glm::vec3 v) {
+void Shader::SetUniform(const std::string& name, vector3 v) {
   GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
   if(uniform_loc == -1)
     std::cout << "warning: uniform not found: " << name << std::endl;
   glUniform3fv(uniform_loc, 1, &v[0]);
 }
 
-void shader::set_uniform(const std::string& name, glm::vec4 v) {
+void Shader::SetUniform(const std::string& name, vector4 v) {
   GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
   if(uniform_loc == -1)
     std::cout << "warning: uniform not found: " << name << std::endl;
   glUniform4fv(uniform_loc, 1, &v[0]);
 }
 
-void shader::set_uniform(const std::string& name, glm::mat4 m) {
+void Shader::SetUniform(const std::string& name, matrix4 m) {
   GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
   if(uniform_loc == -1)
     std::cout << "warning: uniform not found: " << name << std::endl;
   glUniformMatrix4fv(uniform_loc, 1, GL_FALSE, &m[0][0]);
 }
 
-void shader::set_uniform(const std::string& name, int i) {
+void Shader::SetUniform(const std::string& name, int i) {
   GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
   if(uniform_loc == -1)
     std::cout << "warning: uniform not found: " << name << std::endl;
   glUniform1i(uniform_loc, i);
 }
 
-void shader::set_uniform(const std::string& name, float f) {
+void Shader::SetUniform(const std::string& name, float f) {
   GLint uniform_loc = glGetUniformLocation(shader_program, name.c_str());
   if(uniform_loc == -1)
     std::cout << "warning: uniform not found: " << name << std::endl;

@@ -6,16 +6,16 @@
 #include <texture.h>
 #include <shader.h>
 
-class skybox {
+class Skybox {
 public:
   // create skybox with 1 shader and 6 textures
-  skybox(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, float);
-  void draw(camera);
+  Skybox(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, float);
+  void Draw(Camera&);
 
-  virtual ~skybox();
+  virtual ~Skybox();
 private:
-  texture* skybox_cubemap;
-  shader* skybox_shader;
+  Texture* skybox_cubemap;
+  Shader* skybox_shader;
   float scale;
   GLuint VBO;
   GLuint VAO;

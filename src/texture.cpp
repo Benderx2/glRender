@@ -3,7 +3,7 @@
 #include <texture.h>
 #include <stb_image.h>
 
-texture::texture(const std::string& name) {
+Texture::Texture(const std::string& name) {
   type = TEXTURE_TEXTURE2D;
   int width, height, n_comp;
 
@@ -30,7 +30,7 @@ texture::texture(const std::string& name) {
 }
 
 // Cubemap constructor
-texture::texture(const std::string& px, const std::string& nx, const std::string& py, const std::string& ny, const std::string& pz, const std::string& nz) {
+Texture::Texture(const std::string& px, const std::string& nx, const std::string& py, const std::string& ny, const std::string& pz, const std::string& nz) {
   type = TEXTURE_CUBEMAP;
   glGenTextures(1, &texture_id);
   glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
@@ -59,11 +59,11 @@ texture::texture(const std::string& px, const std::string& nx, const std::string
   glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 // Destructor
-texture::~texture() {
+Texture::~Texture() {
   glDeleteTextures(1, &texture_id);
 }
 
-void texture::bind(unsigned int unit) {
+void Texture::Bind(unsigned int unit) {
   assert(unit >= 0 && unit <= 31);
   glActiveTexture(GL_TEXTURE0 + unit);
   if(type == TEXTURE_TEXTURE2D)
@@ -72,9 +72,9 @@ void texture::bind(unsigned int unit) {
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
 }
 
-void texture::draw_block(unsigned int x, unsigned int y, unsigned int w, unsigned int h) {
+void Texture::DrawBlock(unsigned int x, unsigned int y, unsigned int w, unsigned int h) {
   glEnable(GL_TEXTURE_2D);
-  bind(0);
+  Bind(0);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_ONE, GL_ONE);

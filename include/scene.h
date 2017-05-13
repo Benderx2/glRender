@@ -5,27 +5,27 @@
 #include <camera.h>
 #include <skybox.h>
 
-class scene {
+class Scene {
 public:
-  scene(unsigned int);
+  Scene(unsigned int);
 
-  void add_camera(camera* cam);
+  void AddCamera(Camera* cam);
 
-  gameobject* remove_object(const std::string& name);
-  int add_object(gameobject* object);
-  int add_skybox(skybox* sky);
+  GameObject* RemoveObject(const std::string& name);
+  int AddObject(GameObject* object);
+  int AddSky(Skybox* sky);
 
-  gameobject* get_object_ptr(const std::string& name);
-  camera* get_camera_ptr(void);
+  GameObject* GetObjectPointer(const std::string& name);
+  Camera* GetCameraPointer(void);
 
-  void draw(void);
+  void Draw(void);
 
-  virtual ~scene();
+  virtual ~Scene();
 
 private:
-  gameobject** scene_objects;
-  camera* scene_cam;
-  skybox* scene_skybox;
+  GameObject** scene_objects;
+  Camera* scene_cam;
+  Skybox* scene_skybox;
   // N objects;
   unsigned int n_objects;
 };

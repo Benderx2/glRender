@@ -3,44 +3,44 @@
 #include <mesh.h>
 #include <shader_attribute.h>
 
-mesh::mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m) {
+Mesh::Mesh(Vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m) {
   IndexedModel model;
   for(unsigned int i = 0; i < vcount; i++) {
-    model.positions.push_back(*vp[i].get_pos());
-    model.texCoords.push_back(*vp[i].get_texcord());
-    model.normals.push_back(*vp[i].get_normal());
+    model.positions.push_back(*vp[i].GetPos());
+    model.texCoords.push_back(*vp[i].GetTexCoord());
+    model.normals.push_back(*vp[i].GetNormal());
   }
   for(unsigned int i = 0; i < nidx; i++) {
     model.indices.push_back(idx[i]);
   }
   mode = m;
-  init_mesh(model);
+  InitMesh(model);
 }
 
-mesh::mesh(const std::string& name) {
+Mesh::Mesh(const std::string& name) {
   std::cout << "Loading mesh: '" << name << "' ..." << std::endl;
   mode = GL_TRIANGLES;
-  init_mesh(OBJModel(name).ToIndexedModel());
+  InitMesh(OBJModel(name).ToIndexedModel());
   mesh_name = name;
 }
 
-mesh::mesh() {
+Mesh::Mesh() {
   //
 }
 
-mesh::~mesh(void) {
+Mesh::~Mesh(void) {
   glDeleteBuffers(N_BUFFERS, vertex_buffers);
   glDeleteVertexArrays(1, &vertex_buffer_object);
 }
 
-void mesh::draw(void) {
+void Mesh::Draw(void) {
   glBindVertexArray(vertex_buffer_object);
   glDrawElements(mode, vb_drawcount, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
   //std::cout << "Drawing mesh: " << mesh_name << std::endl;
 }
 
-void mesh::init_mesh(const IndexedModel& model) {
+void Mesh::InitMesh(const IndexedModel& model) {
   vb_drawcount = model.indices.size();
   // Create 1 VBO object
   glGenVertexArrays(1, &vertex_buffer_object);

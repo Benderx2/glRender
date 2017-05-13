@@ -9,7 +9,7 @@ typedef enum {
   ENGINE_2D
 } engine_mode;
 
-inline void internal_engine3d(display& dp) {
+inline void internal_engine3d(Display& dp) {
   glPopAttrib();
 
   glMatrixMode(GL_MODELVIEW);
@@ -19,14 +19,14 @@ inline void internal_engine3d(display& dp) {
   glPopMatrix();
 }
 
-inline void internal_engine2d(display& dp) {
-  shader_release();
+inline void internal_engine2d(Display& dp) {
+  ReleaseShaders();
 
   // Reset matrices
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho(0.0f, dp.get_width(), dp.get_height(), 0.0f, -1.0f, 1.0f);
+  glOrtho(0.0f, dp.GetWidth(), dp.GetHeight(), 0.0f, -1.0f, 1.0f);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
@@ -44,7 +44,7 @@ inline void internal_engine2d(display& dp) {
 
 }
 
-inline void engine_set_mode(display& dp, engine_mode mode) {
+inline void EngineSetMode(Display& dp, engine_mode mode) {
   if(dp.is3D == false && mode == ENGINE_3D) {
     internal_engine3d(dp);
     dp.is3D = true;

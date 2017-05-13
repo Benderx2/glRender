@@ -4,7 +4,7 @@
 #include <text.h>
 #include <stb_image.h>
 
-textrender::textrender(const std::string& font) {
+TextRender::TextRender(const std::string& font) {
     int height, width, n_comp;
     unsigned char* image_data = stbi_load(font.c_str(), &width, &height, &n_comp, STBI_rgb_alpha);
     if(image_data == NULL) {
@@ -115,7 +115,7 @@ textrender::textrender(const std::string& font) {
     stbi_image_free(image_data);
 }
 
-void textrender::render(const std::string& str, int x, int y, float scale) {
+void TextRender::Render(const std::string& str, int x, int y, float scale) {
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
   glEnable(GL_BLEND);

@@ -12,33 +12,33 @@ typedef enum {
 
 } primitive_type;
 
-class primitive {
+class Primitive {
 public:
 
-  primitive(primitive_type);
+  Primitive(primitive_type);
 
-  inline mesh& get_mesh() {
+  inline Mesh& GetMesh() {
     return *primitive_mesh;
   }
-  inline primitive_type get_type() {
+  inline primitive_type GetType() {
     return type;
   }
 
-  void map_vertex(glm::vec3);
-  void map_face(unsigned int, unsigned int, unsigned int);
-  void map_texcoord(glm::vec2);
-  void map_normal(glm::vec3);
+  void MapVertex(glm::vec3);
+  void MapFace(unsigned int, unsigned int, unsigned int);
+  void MapTexCoord(glm::vec2);
+  void MapNormal(glm::vec3);
 
-  void build_mesh();
+  void BuildMesh();
 
-  virtual ~primitive();
+  virtual ~Primitive();
 
 private:
-  void create_floor(void);
-  void create_sphere(void);
-  void create_cube(void);
+  void CreateFloor(void);
+  void CreateSphere(void);
+  void CreateCube(void);
 
-  mesh* primitive_mesh;
+  Mesh* primitive_mesh;
 
   std::vector<glm::vec3> custom_vertices;
   std::vector<glm::vec3> custom_normals;

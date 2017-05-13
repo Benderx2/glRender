@@ -10,29 +10,29 @@
 #include <controller.h>
 
 
-class color {
+class Color {
 public:
   float r;
   float g;
   float b;
-  inline color(float R, float G, float B) {
+  inline Color(float R, float G, float B) {
     r = R;
     g = G;
     b = B;
   }
-  static const color WHITE;
-  static const color BLACK;
-  static const color GREEN;
-  static const color RED;
-  static const color BLUE;
-  static const color YELLOW;
-  static const color GRAY;
-  static const color GREEN_DARK;
-  static const color RED_DARK;
-  static const color BLUE_DARK;
+  static const Color WHITE;
+  static const Color BLACK;
+  static const Color GREEN;
+  static const Color RED;
+  static const Color BLUE;
+  static const Color YELLOW;
+  static const Color GRAY;
+  static const Color GREEN_DARK;
+  static const Color RED_DARK;
+  static const Color BLUE_DARK;
 };
 
-class display {
+class Display {
 public:
   GLint gl_major, gl_minor;
   unsigned int width, height;
@@ -51,40 +51,40 @@ public:
   // Frames per second
   float fps;
 
-  display(int w, int h, const std::string& title);
+  Display(int w, int h, const std::string& title);
 
-  void clear(color col, double alpha);
-  void flush(void);
+  void Clear(Color col, double alpha);
+  void Flush(void);
 
-  void update(void);
-  unsigned int ticks(void);
+  void Update(void);
+  unsigned int Ticks(void);
 
-  bool closed(void);
+  bool Closed(void);
 
-  unsigned int* getmousexy(void);
+  unsigned int* GetMouseXY(void);
 
-  unsigned int get_width(void);
-  unsigned int get_height(void);
-  float get_aspect(void);
+  unsigned int GetWidth(void);
+  unsigned int GetHeight(void);
+  float GetAspect(void);
 
-  unsigned int get_fps(void);
+  unsigned int GetFPS(void);
 
-  void culling(bool);
+  void Culling(bool);
 
-  void register_controller(controller* ctrl);
-  void set_mouse(int x, int y);
+  void RegisterController(Controller* ctrl);
+  void SetMouse(int x, int y);
 
-  virtual ~display();
+  virtual ~Display();
 
 private:
   SDL_Window* gl_Window;
   SDL_GLContext gl_Context;
 
-  controller* current_controller;
+  Controller* current_controller;
 
   unsigned int t_start, t_end;
   unsigned int frames;
 
-  void calculate_fps(void);
+  void CalculateFPS(void);
 };
 #endif

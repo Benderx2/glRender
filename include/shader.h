@@ -9,37 +9,38 @@
 #define SHADER_VERTEX 0
 #define SHADER_PIXEL 1
 
-inline void shader_release(void) {
+inline void ReleaseShaders(void) {
   glUseProgram(0);
 }
 
-class shader {
+class Shader {
 public:
-  shader(const std::string&, bool);
-  shader() {
+  Shader(const std::string&, bool);
+  Shader() {
     // None
   }
-  virtual ~shader();
-  void update(const transform& t, const camera& cam);
-  void bind(void);
+  virtual ~Shader();
 
-  void set_uniform(const std::string& name, int i);
-  void set_uniform(const std::string& name, float f);
-  void set_uniform(const std::string& name, glm::vec2 v);
-  void set_uniform(const std::string& name, glm::vec3 v);
-  void set_uniform(const std::string& name, glm::vec4 v);
-  void set_uniform(const std::string& name, glm::mat4 m);
+  void Update(const Transform& t, const Camera& cam);
+  void Bind(void);
 
-  inline GLuint get_uniform(const std::string& name) {
+  void SetUniform(const std::string& name, int i);
+  void SetUniform(const std::string& name, float f);
+  void SetUniform(const std::string& name, vector2 v);
+  void SetUniform(const std::string& name, vector3 v);
+  void SetUniform(const std::string& name, vector4 v);
+  void SetUniform(const std::string& name, matrix4 m);
+
+  inline GLuint GetUniform(const std::string& name) {
     return glGetUniformLocation(shader_program, name.c_str());
   }
-  inline GLuint get_shader_program(void) {
+  inline GLuint GetShaderProgram(void) {
     return shader_program;
   }
-  inline void mark_attribute(unsigned int attr_no, const std::string& attribute) {
+  inline void MarkAttribute(unsigned int attr_no, const std::string& attribute) {
     glBindAttribLocation(shader_program, attr_no, attribute.c_str());
   }
-  inline GLint get_attribute(const std::string& attribute) {
+  inline GLint GetAttribute(const std::string& attribute) {
     return glGetAttribLocation(shader_program, attribute.c_str());
   }
 private:
@@ -53,8 +54,8 @@ private:
   static const unsigned int N_SHADERS = 2;
   GLuint shaders[N_SHADERS];
 
-  std::string load_shader(const std::string& name);
-  void check_error(GLuint shader, GLuint flag, bool is_program, const std::string& error_msg);
-  GLuint create_shader(const std::string& text, unsigned int type);
+  std::string LoadShader(const std::string& name);
+  void CheckErr(GLuint shader, GLuint flag, bool is_program, const std::string& error_msg);
+  GLuint CreateShader(const std::string& text, unsigned int type);
 };
 #endif

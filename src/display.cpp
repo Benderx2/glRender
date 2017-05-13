@@ -2,20 +2,20 @@
 #include <render.h>
 #include <iostream>
 
-const color color::WHITE(1.0f, 1.0f, 1.0f);
-const color color::BLACK(0.0f, 0.0f, 0.0f);
-const color color::RED(0.7f, 0.3f, 0.3f);
-const color color::GREEN(0.3f, 0.7f, 0.3f);
-const color color::BLUE(0.3f, 0.3f, 0.7f);
-const color color::GRAY(0.5f, 0.5f, 0.5f);
-const color color::YELLOW(0.9f, 0.9f, 0.05f);
-const color color::GREEN_DARK(0.0f, 0.9f, 0.0f);
-const color color::RED_DARK(0.9f, 0.0f, 0.0f);
-const color color::BLUE_DARK(0.0f, 0.0f, 0.9f);
+const Color Color::WHITE(1.0f, 1.0f, 1.0f);
+const Color Color::BLACK(0.0f, 0.0f, 0.0f);
+const Color Color::RED(0.7f, 0.3f, 0.3f);
+const Color Color::GREEN(0.3f, 0.7f, 0.3f);
+const Color Color::BLUE(0.3f, 0.3f, 0.7f);
+const Color Color::GRAY(0.5f, 0.5f, 0.5f);
+const Color Color::YELLOW(0.9f, 0.9f, 0.05f);
+const Color Color::GREEN_DARK(0.0f, 0.9f, 0.0f);
+const Color Color::RED_DARK(0.9f, 0.0f, 0.0f);
+const Color Color::BLUE_DARK(0.0f, 0.0f, 0.9f);
 
-display::display(int w, int h, const std::string& title) {
+Display::Display(int w, int h, const std::string& title) {
 
-  std::cout << "Initialising display..." << std::endl;
+  std::cout << "Initialising Display..." << std::endl;
 
   if(SDL_Init(SDL_INIT_EVERYTHING)) {
     std::cerr << "SDL failed to initialise." << std::endl;
@@ -49,7 +49,7 @@ display::display(int w, int h, const std::string& title) {
   }
 
   std::cout << "-- glew initialised." << std::endl;
-  std::cout << "-- glRender version: " << glRender_version << std::endl;
+  std::cout << "-- glRender version: " << glRender_version_major << "." << glRender_version_minor << std::endl;
 
   std::cout << "Display module initialised." << std::endl;
 
@@ -63,41 +63,41 @@ display::display(int w, int h, const std::string& title) {
   is3D = true; // Engine starts in 3D mode.
   aspect = (float)width/(float)height;
   frames = 0;
-  t_start = ticks();
+  t_start = Ticks();
 }
 
-display::~display() {
+Display::~Display() {
   SDL_GL_DeleteContext(gl_Context);
   SDL_DestroyWindow(gl_Window);
   SDL_Quit();
 }
 
-void display::clear(color col, double alpha) {
+void Display::Clear(Color col, double alpha) {
   glClearColor(col.r,col.g,col.b,alpha);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void display::flush(void) {
+void Display::Flush(void) {
   glFlush();
   SDL_GL_SwapWindow(gl_Window);
 }
 
-unsigned int display::ticks(void) {
+unsigned int Display::Ticks(void) {
   return (unsigned int)SDL_GetTicks();
 }
 
-bool display::closed(void) {
+bool Display::Closed(void) {
   return has_quit;
 }
 
-unsigned int* display::getmousexy(void) {
+unsigned int* Display::GetMouseXY(void) {
   mouse_moved = false;
   return new unsigned int[2] { mouse_x, mouse_y };
 }
 
-void display::update(void) {
+void Display::Update(void) {
 // Calculate FPS
-  calculate_fps();
+  CalculateFPS();
   SDL_Event event;
   while(SDL_PollEvent(&event)) {
     if(event.type == SDL_QUIT) {
@@ -173,28 +173,28 @@ void display::update(void) {
     }
   }
   if(current_controller != NULL) {
-    if(k_up == true) current_controller->call_process(CONTROLLER_UP, 0.0f, 0.0f);
-    if(k_down == true) current_controller->call_process(CONTROLLER_DOWN, 0.0f, 0.0f);
-    if(k_left == true) current_controller->call_process(CONTROLLER_LEFT, 0.0f, 0.0f);
-    if(k_right == true) current_controller->call_process(CONTROLLER_RIGHT, 0.0f, 0.0f);
-    if(k_z == true) current_controller->call_process(CONTROLLER_Z, 0.0f, 0.0f);
-    if(k_x == true) current_controller->call_process(CONTROLLER_X, 0.0f, 0.0f);
-    if(mouse_moved == true) current_controller->call_process(CONTROLLER_MOUSE, mouse_x, mouse_y);
+    if(k_up == true) current_controller->CallProcess(CONTROLLER_UP, 0.0f, 0.0f);
+    if(k_down == true) current_controller->CallProcess(CONTROLLER_DOWN, 0.0f, 0.0f);
+    if(k_left == true) current_controller->CallProcess(CONTROLLER_LEFT, 0.0f, 0.0f);
+    if(k_right == true) current_controller->CallProcess(CONTROLLER_RIGHT, 0.0f, 0.0f);
+    if(k_z == true) current_controller->CallProcess(CONTROLLER_Z, 0.0f, 0.0f);
+    if(k_x == true) current_controller->CallProcess(CONTROLLER_X, 0.0f, 0.0f);
+    if(mouse_moved == true) current_controller->CallProcess(CONTROLLER_MOUSE, mouse_x, mouse_y);
   }
 }
-unsigned int display::get_width(void) {
+unsigned int Display::GetWidth(void) {
   return width;
 }
-unsigned int display::get_height(void) {
+unsigned int Display::GetHeight(void) {
   return height;
 }
-float display::get_aspect(void) {
+float Display::GetAspect(void) {
   return aspect;
 }
-unsigned int display::get_fps(void) {
+unsigned int Display::GetFPS(void) {
   return fps;
 }
-void display::culling(bool toggle) {
+void Display::Culling(bool toggle) {
   if(toggle) {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -205,18 +205,18 @@ void display::culling(bool toggle) {
   }
 }
 
-void display::register_controller(controller* ctrl) {
+void Display::RegisterController(Controller* ctrl) {
   current_controller = ctrl;
 }
-void display::set_mouse(int x, int y) {
+void Display::SetMouse(int x, int y) {
   SDL_WarpMouseInWindow(gl_Window, x, y);
 }
-void display::calculate_fps(void) {
-  t_end = ticks();
+void Display::CalculateFPS(void) {
+  t_end = Ticks();
   frames += 1;
   if(t_end - t_start > 1000) {
     fps = frames;
-    t_start = ticks();
+    t_start = Ticks();
     frames = 0;
   }
 }

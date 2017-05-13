@@ -2,12 +2,12 @@
 #include <iostream>
 #include <shader_attribute.h>
 
-skybox::skybox(const std::string& shader_file, const std::string& f1, const std::string& f2, const std::string& f3, const std::string& f4, const std::string& f5, const std::string& f6, float scl) {
+Skybox::Skybox(const std::string& shader_file, const std::string& f1, const std::string& f2, const std::string& f3, const std::string& f4, const std::string& f5, const std::string& f6, float scl) {
 
   scale = scl;
 
-  skybox_shader = new shader(shader_file, true);
-  skybox_cubemap = new texture(f1, f2, f3, f4, f5, f6);
+  skybox_shader = new Shader(shader_file, true);
+  skybox_cubemap = new Texture(f1, f2, f3, f4, f5, f6);
 
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
@@ -66,26 +66,26 @@ skybox::skybox(const std::string& shader_file, const std::string& f1, const std:
 
 }
 
-void skybox::draw(camera cam) {
+void Skybox::Draw(Camera& cam) {
   // Identity transformation
-  transform t;
-  t.get_scale() = glm::vec3(scale, scale, scale);
+  Transform t;
+  t.GetScale() = vector3(scale, scale, scale);
   // Bind our skybox shader and update it with the transform and camera
-  skybox_shader->bind();
-  skybox_shader->update(t, cam);
-  skybox_cubemap->bind(0);
+  skybox_shader->Bind();
+  skybox_shader->Update(t, cam);
+  skybox_cubemap->Bind(0);
   // Disable depth masking for now
   glDepthMask(GL_FALSE);
   // Finally draw our skybox
   glBindVertexArray(VAO);
-  skybox_shader->set_uniform("skybox", 0);
+  skybox_shader->SetUniform("skybox", 0);
   glDrawArrays(GL_TRIANGLES, 0, 36);
   // unbind vertex array
   glBindVertexArray(0);
   glDepthMask(GL_TRUE);
 }
 
-skybox::~skybox() {
+Skybox::~Skybox() {
   delete skybox_shader;
   delete skybox_cubemap;
   glDeleteBuffers(1, &VBO);

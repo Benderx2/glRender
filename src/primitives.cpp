@@ -1,17 +1,18 @@
 #include <primitives.h>
+#include <render_type.h>
 #include <iostream>
 
-primitive::primitive(primitive_type ptype) {
+Primitive::Primitive(primitive_type ptype) {
   type = ptype;
   switch(ptype) {
     case PRIMITIVE_CUBE:
-      create_cube();
+      CreateCube();
       break;
     case PRIMITIVE_SPHERE:
-      create_sphere();
+      CreateSphere();
       break;
     case PRIMITIVE_FLOOR:
-      create_floor();
+      CreateFloor();
       break;
     case PRIMITIVE_CUSTOM:
       break;
@@ -21,22 +22,22 @@ primitive::primitive(primitive_type ptype) {
   }
 }
 // Create floor primitive
-void primitive::create_floor(void) {
-  vertex vertices[] = {
-    vertex(glm::vec3(1.0f, 0.0f, 1.0f), glm::vec2(0, 1), glm::vec3(0.0f, -1.0f, 0.0f)),
-    vertex(glm::vec3(-1.0f, 0.0f, 1.0f), glm::vec2(0, 0), glm::vec3(0.0f, -1.0f, 0.0f)),
-    vertex(glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec2(1, 0), glm::vec3(0.0f, -1.0f, 0.0f)),
-    vertex(glm::vec3(1.0f, 0.0f, -1.0f), glm::vec2(1, 1), glm::vec3(0.0f, -1.0f, 0.0f))
+void Primitive::CreateFloor(void) {
+  Vertex vertices[] = {
+    Vertex(vector3(1.0f, 0.0f, 1.0f), glm::vec2(0, 1), vector3(0.0f, -1.0f, 0.0f)),
+    Vertex(vector3(-1.0f, 0.0f, 1.0f), glm::vec2(0, 0), vector3(0.0f, -1.0f, 0.0f)),
+    Vertex(vector3(-1.0f, 0.0f, -1.0f), glm::vec2(1, 0), vector3(0.0f, -1.0f, 0.0f)),
+    Vertex(vector3(1.0f, 0.0f, -1.0f), glm::vec2(1, 1), vector3(0.0f, -1.0f, 0.0f))
   };
   unsigned int indices[] = {
     0, 1, 2, 3
   };
-  primitive_mesh = new mesh(&vertices[0], 4, &indices[0], 4, GL_QUADS);
+  primitive_mesh = new Mesh(&vertices[0], 4, &indices[0], 4, GL_QUADS);
 }
 // Create a sphere primitive
-void primitive::create_sphere(void) {
+void Primitive::CreateSphere(void) {
   // Sphere Primitive, thanks to darkenwolf for the implementation
-  std::vector<vertex> vertices;
+  std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
 
   float radius = 1.0f;
@@ -52,7 +53,7 @@ void primitive::create_sphere(void) {
       float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
       float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
 
-      vertex v;
+      Vertex v;
       v.pos.x = x*radius;
       v.pos.y = y*radius;
       v.pos.z = z*radius;
@@ -74,39 +75,39 @@ void primitive::create_sphere(void) {
       indices.push_back((r+1)* sectors + s);
     }
   }
-  primitive_mesh =  new mesh(&vertices[0], vertices.size(), &indices[0], indices.size(), GL_QUADS);
+  primitive_mesh =  new Mesh(&vertices[0], vertices.size(), &indices[0], indices.size(), GL_QUADS);
 }
 // Create cube primitive
-void primitive::create_cube(void) {
+void Primitive::CreateCube(void) {
   // Cube Primitive
-  vertex* vp = new vertex[8];
+  Vertex* vp = new Vertex[8];
 
-  vp[0].pos = glm::vec3(-1, -1, 1);
-  vp[0].normal = glm::vec3(-1, -1, 1);
+  vp[0].pos = vector3(-1, -1, 1);
+  vp[0].normal = vector3(-1, -1, 1);
   vp[0].texcord = glm::vec2(0, 0);
 
-  vp[1].pos = glm::vec3(1, -1, 1);
-  vp[1].normal = glm::vec3(1, -1, 1);
+  vp[1].pos = vector3(1, -1, 1);
+  vp[1].normal = vector3(1, -1, 1);
   vp[1].texcord = glm::vec2(1, 0);
 
-  vp[2].pos = glm::vec3(-1, 1, 1);
-  vp[2].normal = glm::vec3(-1, 1, 1);
+  vp[2].pos = vector3(-1, 1, 1);
+  vp[2].normal = vector3(-1, 1, 1);
   vp[2].texcord = glm::vec2(0, 1);
 
-  vp[3].pos = glm::vec3(1, 1, 1);
-  vp[3].normal = glm::vec3(1, 1, 1);
+  vp[3].pos = vector3(1, 1, 1);
+  vp[3].normal = vector3(1, 1, 1);
   vp[3].texcord = glm::vec2(1, 1);
 
-  vp[5].pos = glm::vec3(1, -1, -1);
-  vp[5].normal = glm::vec3(1, -1, -1);
+  vp[5].pos = vector3(1, -1, -1);
+  vp[5].normal = vector3(1, -1, -1);
   vp[5].texcord = glm::vec2(0, 0);
 
-  vp[6].pos = glm::vec3(-1, 1, -1);
-  vp[6].normal = glm::vec3(-1, 1, -1);
+  vp[6].pos = vector3(-1, 1, -1);
+  vp[6].normal = vector3(-1, 1, -1);
   vp[6].texcord = glm::vec2(1, 1);
 
-  vp[7].pos = glm::vec3(1, 1, -1);
-  vp[7].normal = glm::vec3(1, 1, -1);
+  vp[7].pos = vector3(1, 1, -1);
+  vp[7].normal = vector3(1, 1, -1);
   vp[7].texcord = glm::vec2(0, 1);
 
   unsigned int indices[] = {
@@ -118,12 +119,12 @@ void primitive::create_cube(void) {
     2, 3, 7, 6
   };
 
-  primitive_mesh = new mesh(vp, 8, indices, sizeof(indices), GL_QUADS);
+  primitive_mesh = new Mesh(vp, 8, indices, sizeof(indices), GL_QUADS);
 }
 // The below functions are designed to build primitives directly from code,
 // as loading data from a model might be costly as well as unavailable on systems with
 // no proper filesystems.
-void primitive::map_vertex(glm::vec3 v) {
+void Primitive::MapVertex(vector3 v) {
   if(type != PRIMITIVE_CUSTOM) {
     std::cerr << "error: attempt to map vertex to a non-custom primitive! ignoring..." << std::endl;
     return;
@@ -131,7 +132,7 @@ void primitive::map_vertex(glm::vec3 v) {
   custom_vertices.push_back(v);
 }
 
-void primitive::map_texcoord(glm::vec2 v) {
+void Primitive::MapTexCoord(glm::vec2 v) {
   if(type != PRIMITIVE_CUSTOM) {
     std::cerr << "error: attempt to map texcoord to a non-custom primitive! ignoring..." << std::endl;
     return;
@@ -139,7 +140,7 @@ void primitive::map_texcoord(glm::vec2 v) {
   custom_texcoords.push_back(v);
 }
 
-void primitive::map_face(unsigned int i1, unsigned int i2, unsigned int i3) {
+void Primitive::MapFace(unsigned int i1, unsigned int i2, unsigned int i3) {
   if(type != PRIMITIVE_CUSTOM) {
     std::cerr << "error: attempt to map face to a non-custom primitive! ignoring..." << std::endl;
     return;
@@ -149,7 +150,7 @@ void primitive::map_face(unsigned int i1, unsigned int i2, unsigned int i3) {
   custom_indices.push_back(i3);
 }
 
-void primitive::map_normal(glm::vec3 n) {
+void Primitive::MapNormal(vector3 n) {
   if(type != PRIMITIVE_CUSTOM) {
     std::cerr << "error: attempt to map normal to a non-custom primitive! ignoring..." << std::endl;
     return;
@@ -158,7 +159,7 @@ void primitive::map_normal(glm::vec3 n) {
 }
 
 // Convert all data to mesh data
-void primitive::build_mesh() {
+void Primitive::BuildMesh() {
   if(type != PRIMITIVE_CUSTOM) {
     std::cerr << "error: cannot build mesh for a non-custom primitive! ignoring..." << std::endl;
     return;
@@ -169,9 +170,9 @@ void primitive::build_mesh() {
   if(custom_vertices.size() != custom_normals.size()) {
     std::cout << "warning: not all vertices have a normal!" << std::endl;
   }
-  std::vector<vertex> mesh_vertices;
+  std::vector<Vertex> mesh_vertices;
   for(unsigned int i = 0; i < custom_vertices.size(); i++) {
-    vertex v;
+    Vertex v;
 
     v.pos = custom_vertices[i];
 
@@ -183,13 +184,13 @@ void primitive::build_mesh() {
     if(i < custom_normals.size())
       v.normal = custom_normals[i];
     else
-      v.normal = glm::vec3(0.0f, 0.0f, 0.0f);
+      v.normal = vector3(0.0f, 0.0f, 0.0f);
 
     mesh_vertices.push_back(v);
   }
-  primitive_mesh = new mesh(&mesh_vertices[0], mesh_vertices.size(), &custom_indices[0], custom_indices.size(), GL_TRIANGLES);
+  primitive_mesh = new Mesh(&mesh_vertices[0], mesh_vertices.size(), &custom_indices[0], custom_indices.size(), GL_TRIANGLES);
 }
 // Destructor
-primitive::~primitive() {
+Primitive::~Primitive() {
   delete primitive_mesh;
 }

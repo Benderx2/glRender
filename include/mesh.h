@@ -1,45 +1,49 @@
 #ifndef mesh_h
 #define mesh_h
 
-#include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <vector>
 
 #include <obj_loader.h>
+#include <render_type.h>
 
-
-class vertex {
+class Vertex {
 public:
-  vertex(const glm::vec3& pos, const glm::vec2& texcord, const glm::vec3& normal = glm::vec3(0,0,0)) {
+  Vertex(const vector3& pos, const vector2& texcord, const vector3& normal = glm::vec3(0,0,0)) {
     this->pos = pos;
     this->texcord = texcord;
     this->normal = normal;
   }
-  vertex() {
+  Vertex() {
 
   }
-  inline glm::vec3* get_pos(void) {
+  inline vector3* GetPos(void) {
     return &pos;
   }
-  inline glm::vec2* get_texcord(void) {
+  inline vector2* GetTexCoord(void) {
     return &texcord;
   }
-  inline glm::vec3* get_normal(void) {
+  inline vector3* GetNormal(void) {
     return &normal;
   }
 
-  glm::vec3 pos;
-  glm::vec2 texcord;
-  glm::vec3 normal;
+  vector3 pos;
+  vector2 texcord;
+  vector3 normal;
 };
-class mesh {
+
+class Mesh {
 public:
-  mesh(vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m);
-  mesh(const std::string& name);
-  mesh();
-  virtual ~mesh(void);
-  void draw(void);
+  Mesh(Vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m);
+  Mesh(const std::string& name);
+  Mesh();
+
+  void Draw(void);
+
+  virtual ~Mesh(void);
+
 private:
+
   enum {
     POSITION_VB,
     TEXCORD_VB,
@@ -51,8 +55,9 @@ private:
   GLuint vertex_buffer_object;
   GLuint vertex_buffers[N_BUFFERS];
   unsigned int vb_drawcount;
-  std::string mesh_name;
 
-  void init_mesh(const IndexedModel& model);
+  std::string mesh_name;
+  
+  void InitMesh(const IndexedModel& model);
 };
 #endif

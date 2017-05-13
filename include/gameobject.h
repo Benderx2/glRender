@@ -6,49 +6,64 @@
 #include <shader.h>
 #include <texture.h>
 
-
-class gameobject {
+class GameObject {
 public:
 
-  void (*predraw)(mesh& msh, shader& shdr, texture& tex, transform& t) = NULL;
+  void (*predraw)(Mesh* msh, Shader* shdr, Texture* tex, Transform* t) = NULL;
 
-  inline gameobject(const std::string& name) {
+  inline GameObject(const std::string& name) {
     // Empty initialiser
     obj_name = name;
   }
+  inline GameObject(const std::string& name, Mesh* msh, Texture* tex, Shader* shd, Transform* tfm, void(*pdraw)(Mesh*, Shader*, Texture*, Transform*)) {
+    obj_name = name;
+    obj_tex = tex;
+    obj_msh = msh;
+    obj_shdr = shd;
+    obj_trans = tfm;
+    predraw = pdraw;
+  }
 
-  inline void set_property(const texture& tex) {
+  inline void SetProperties(Mesh* msh, Texture* tex, Shader* shd, Transform* tfm, void(*pdraw)(Mesh*, Shader*, Texture*, Transform*)) {
+    obj_tex = tex;
+    obj_msh = msh;
+    obj_shdr = shd;
+    obj_trans = tfm;
+    predraw = pdraw;
+  }
+
+  inline void SetProperty(Texture* tex) {
     obj_tex = tex;
   }
-  inline void set_property(const mesh& msh) {
+  inline void SetProperty(Mesh* msh) {
     obj_msh = msh;
   }
-  inline void set_property(const shader& shd) {
+  inline void SetProperty(Shader* shd) {
     obj_shdr = shd;
   }
-  inline void set_property(const transform& tfm) {
+  inline void SetProperty(Transform* tfm) {
     obj_trans = tfm;
   }
 
-  inline void set_property(void(*pdraw)(mesh&, shader&, texture&, transform&)) {
+  inline void SetProperty(void(*pdraw)(Mesh*, Shader*, Texture*, Transform*)) {
     predraw = pdraw;
   }
-  inline texture& get_texture() { return obj_tex; }
-  inline shader& get_shader() { return obj_shdr; }
-  inline mesh& get_mesh() { return obj_msh; }
-  inline transform& get_transform() { return obj_trans; }
-  inline std::string& get_name() { return obj_name; }
+  inline Texture* GetTexture() { return obj_tex; }
+  inline Shader* GetShader() { return obj_shdr; }
+  inline Mesh* GetMesh() { return obj_msh; }
+  inline Transform* GetTransform() { return obj_trans; }
+  inline std::string GetName() { return obj_name; }
 
-  void draw(const camera& cam);
+  void Draw(const Camera& cam);
 
 private:
-  
+
   // Transformations
-  transform obj_trans;
+  Transform* obj_trans;
   // Object meshses, shaders and textures
-  mesh obj_msh;
-  shader obj_shdr;
-  texture obj_tex;
+  Mesh* obj_msh;
+  Shader* obj_shdr;
+  Texture* obj_tex;
   std::string obj_name;
 };
 #endif

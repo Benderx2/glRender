@@ -9,18 +9,19 @@ typedef enum {
   TEXTURE_CUBEMAP
 } texture_type;
 
-class texture {
+class Texture {
 public:
-  texture(const std::string& filename);
-  texture(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-  texture() {
+  Texture(const std::string& filename);
+  Texture(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
+  Texture() {
     // None
   }
-  void bind(unsigned int unit);
-  void draw_block(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
-  virtual ~texture();
+  void Bind(unsigned int unit);
+  void DrawBlock(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
+  virtual ~Texture();
 private:
   GLuint texture_id;
   texture_type type;
 };
+
 #endif

@@ -1,102 +1,92 @@
 #include <iostream>
 #include <render.h>
 
-void predraw(mesh& msh, shader& shdr, texture& tex, transform& t);
+void predraw(Mesh* msh, Shader* shdr, Texture* tex, Transform* t);
 
-void controller_process(scene* s, controller_key k, float x, float y);
+void controller_process(Scene* s, controller_key k, float x, float y);
 
 bool start_rendering = false;
 
 int main(void) {
 
-  display screen(640, 480, "glRender example");
+  Display screen(640, 480, "glRender example");
 
-  screen.culling(true);
-  screen.set_mouse(screen.get_width()/2, screen.get_height()/2);
+  screen.Culling(true);
+  screen.SetMouse(screen.GetWidth()/2, screen.GetHeight()/2);
 
-  camera cam(glm::vec3(0,0,3), glm::vec3(0,0,-1), glm::vec3(0,1,0), 70.0f, screen.get_aspect(), 0.01f, 1000.0f);
+  Camera cam(vector3(0,0,3), vector3(0,0,-1), vector3(0,1,0), 70.0f, screen.GetAspect(), 0.01f, 1000.0f);
 
   // Our glrender logo
-  texture tex02("data/glrender.png");
+  Texture tex_logo("data/glrender.png");
   // Load up a basic textrenderer
-  textrender text("data/glfont.png");
+  TextRender text("data/glfont.png");
 
-  // Create gameobject called "obj01"
-  gameobject terrain("obj_terrain");
-  skybox sky("shaders/shader_sky", "data/sky/siege_rt.tga", "data/sky/siege_lf.tga", "data/sky/siege_up.tga", "data/sky/siege_dn.tga", "data/sky/siege_bk.tga", "data/sky/siege_ft.tga", 10.0f);
-  // Shader, mesh, transformation and texture objects for our monkey
-  shader shdr("shaders/shader3d", true);
-  mesh msh("data/terrain.obj");
-  texture tex("data/grass.jpg");
-  transform t;
+  // Create gameobject called "obj_terrain"
   // Set Mesh, Shader, Texture, and Transformation for the model..
-  terrain.set_property(msh);
-  terrain.set_property(shdr);
-  terrain.set_property(tex);
-  terrain.set_property(t);
-
-  // Also our "predraw" function which is called every frame before drawing...
-  terrain.set_property(predraw);
-
+  // Also our "predraw" function which is called every frame before drawing..
+  GameObject terrain("obj_terrain", new Mesh("data/terrain.obj"), new Texture("data/grass.jpg"), new Shader("shaders/shader3d", true), new Transform(), predraw);
+  // Create skybox
+  Skybox sky("shaders/shader_sky", "data/sky/siege_rt.tga", "data/sky/siege_lf.tga", "data/sky/siege_up.tga", "data/sky/siege_dn.tga", "data/sky/siege_bk.tga", "data/sky/siege_ft.tga", 10.0f);
   // Create a scene with 1 object
-  scene my_scene(1);
+  Scene my_scene(1);
   // Add the camera and the only object and the skybox
-  my_scene.add_camera(&cam);
-  my_scene.add_object(&terrain);
-  my_scene.add_skybox(&sky);
+  my_scene.AddCamera(&cam);
+  my_scene.AddObject(&terrain);
+  my_scene.AddSky(&sky);
   // Create a controller for the scene
-  controller sample_controller(&my_scene);
+  Controller sample_controller(&my_scene);
   // Set our callback
-  sample_controller.set_callback(controller_process);
+  sample_controller.SetCallBack(controller_process);
   // Finally register the controller
-  screen.register_controller(&sample_controller);
+  screen.RegisterController(&sample_controller);
 
-  while(!screen.closed()) {
+  while(!screen.Closed()) {
     // Update our display module
-    screen.update();
+    screen.Update();
 
     // Clear the screen
-    screen.clear(color::BLUE, 1.0f);
+    screen.Clear(Color::BLUE, 1.0f);
 
     // 3D Drawing Code goes here..
     // Draw our scene
     if(start_rendering == true) {
-      my_scene.draw();
+      my_scene.Draw();
     }
     // Switch to 2D rendering mode now
-    engine_set_mode(screen, ENGINE_2D);
+    EngineSetMode(screen, ENGINE_2D);
     // 2D Drawing Code goes here...
     if(start_rendering == false)
-      text.render("Press Z to start rendering. Use arrow keys to rotate.", 150, 200, 1.0f);
+      text.Render("Press Z to start rendering. Use arrow keys to rotate.", 150, 200, 1.0f);
     else
-      text.render("FPS: " + std::to_string(screen.get_fps()), 0, 0, 1.0f);
+      text.Render("FPS: " + std::to_string(screen.GetFPS()), 0, 0, 1.0f);
     // Render our logo!
-    tex02.draw_block(screen.get_width() - 64, screen.get_height() - 64, 64, 64);
+    tex_logo.DrawBlock(screen.GetWidth() - 64, screen.GetHeight() - 64, 64, 64);
     // Do not forget to reset to 3D! (or just see what happens if you dont)
-    engine_set_mode(screen, ENGINE_3D);
+    EngineSetMode(screen, ENGINE_3D);
     // Finally, flush the output.
-    screen.flush();
+    screen.Flush();
   }
   return 0;
 }
 
-void predraw(mesh& msh, shader& shdr, texture& tex, transform& t) {
-  shdr.set_uniform("lightdir", glm::vec3(0,0,1));
+void predraw(Mesh* msh, Shader* shdr, Texture* tex, Transform* t) {
+  // Set our lightdir vector in our shader
+  shdr->SetUniform("lightdir", vector3(0,0,1));
 }
 
-void controller_process(scene* s, controller_key k, float x, float y) {
-  gameobject* obj01 = (*s).get_object_ptr("obj_terrain");
+void controller_process(Scene* s, controller_key k, float x, float y) {
+  GameObject* obj01 = s->GetObjectPointer("obj_terrain");
   if(k == CONTROLLER_LEFT) {
-    obj01->get_transform().get_rotation().y -= 0.1f;
+    obj01->GetTransform()->GetRotation().y -= 0.1f;
   }
   if(k == CONTROLLER_RIGHT) {
-    obj01->get_transform().get_rotation().y += 0.1f;
+    obj01->GetTransform()->GetRotation().y += 0.1f;
   }
   if(k == CONTROLLER_UP) {
-    obj01->get_transform().get_rotation().x -= 0.1f;
+    obj01->GetTransform()->GetRotation().x -= 0.1f;
   }
   if(k == CONTROLLER_DOWN) {
-    obj01->get_transform().get_rotation().x += 0.1f;
+    obj01->GetTransform()->GetRotation().x += 0.1f;
   }
   if(k == CONTROLLER_Z) {
     start_rendering = true;
