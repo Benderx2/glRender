@@ -1,6 +1,8 @@
 #ifndef transform_h
 #define transform_h
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <render_type.h>
 
 class Transform {
@@ -56,9 +58,11 @@ public:
       matrix4 matrix_rotz = glm::rotate(v_rot.z, vector3(0,0,1));
 
       matrix4 matrix_rot = matrix_rotz * matrix_roty * matrix_rotx;
+      matrix_rot = matrix_rot;
 
       return matrix_trans * matrix_rot * matrix_scale;
     }
+
 private:
   vector3 v_translate;
   vector3 v_rot;

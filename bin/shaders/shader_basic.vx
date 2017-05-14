@@ -1,7 +1,14 @@
 #version 120
 
 attribute vec3 position;
+attribute vec2 texCoord;
+attribute vec3 normal;
+
+uniform mat4 transform;
+
+varying vec2 texcord0;
 
 void main() {
-  gl_Position = vec4(position, 1.0f);
+  gl_Position = transform * vec4(position, 1.0f);
+  texcord0 = texCoord;
 }

@@ -17,10 +17,18 @@ Mesh::Mesh(Vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx
   InitMesh(model);
 }
 
-Mesh::Mesh(const std::string& name) {
-  std::cout << "Loading mesh: '" << name << "' ..." << std::endl;
+Mesh::Mesh(const std::string& name, model_type mtype) {
+  type = mtype;
   mode = GL_TRIANGLES;
-  InitMesh(OBJModel(name).ToIndexedModel());
+
+  std::cout << "Loading mesh: '" << name << "' ..." << std::endl;
+
+  if(mtype == MESH_OBJ) {
+    InitMesh(OBJModel(name).ToIndexedModel());
+  } else if(mtype == MESH_MD2) {
+    md2_loader = new MD2Loader(name);
+  }
+
   mesh_name = name;
 }
 
@@ -31,13 +39,100 @@ Mesh::Mesh() {
 Mesh::~Mesh(void) {
   glDeleteBuffers(N_BUFFERS, vertex_buffers);
   glDeleteVertexArrays(1, &vertex_buffer_object);
+  if(md2_loader)
+    delete md2_loader;
 }
 
 void Mesh::Draw(void) {
+  // Quake2 uses counter-clockwise faces
+  if(type == MESH_MD2)
+    glCullFace(GL_FRONT);
+
   glBindVertexArray(vertex_buffer_object);
   glDrawElements(mode, vb_drawcount, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
+
+  if(type == MESH_MD2)
+    glCullFace(GL_BACK);
+
   //std::cout << "Drawing mesh: " << mesh_name << std::endl;
+}
+
+void Mesh::SetFrame(int n) {
+  if(type != MESH_MD2)
+    return;
+
+  current_frame = n;
+  MD2Model model = md2_loader->GetFrameData(n);
+  UpdateVertexData(&model.vertices[0], model.vertices.size(), &model.indices[0], model.indices.size(), mode);
+}
+// MD2 Animation
+void Mesh::SetFrameInterpolation(int n, float interp) {
+  if(type != MESH_MD2)
+    return;
+
+  if((n < 0) || (n > md2_loader->GetHeader()->n_frames))
+    return;
+
+
+  MD2Model model = md2_loader->GetFrameData(n);
+  MD2Model next_model = md2_loader->GetFrameData(n+1);
+
+  for(int i = 0; i < model.vertices.size(); i++) {
+    // Interpolate vertices and normals
+    model.vertices[i].pos.x = model.vertices[i].pos.x + interp * (next_model.vertices[i].pos.x - model.vertices[i].pos.x);
+    model.vertices[i].pos.y = model.vertices[i].pos.y + interp * (next_model.vertices[i].pos.y - model.vertices[i].pos.y);
+    model.vertices[i].pos.z = model.vertices[i].pos.z + interp * (next_model.vertices[i].pos.z - model.vertices[i].pos.z);
+
+    model.vertices[i].normal.x = model.vertices[i].normal.x + interp * (next_model.vertices[i].normal.x - model.vertices[i].normal.x);
+    model.vertices[i].normal.y = model.vertices[i].normal.y + interp * (next_model.vertices[i].normal.y - model.vertices[i].normal.y);
+    model.vertices[i].normal.z = model.vertices[i].normal.z + interp * (next_model.vertices[i].normal.z - model.vertices[i].normal.z);
+  }
+  UpdateVertexData(&model.vertices[0], model.vertices.size(), &model.indices[0], model.indices.size(), mode);
+}
+
+void Mesh::Animate(int start, int end, float* interp) {
+  if(type != MESH_MD2)
+    return;
+
+  if(current_frame < start || current_frame > end)
+    current_frame = start;
+
+  if(*interp >= 1.0f) {
+    *interp = 0.0f;
+    current_frame++;
+  }
+
+  if(current_frame > end)
+    current_frame = start;
+
+  SetFrameInterpolation(current_frame, *interp);
+}
+
+void Mesh::CycleAnimation(int start, int end) {
+  then = now;
+  now = (float)clock() / CLOCKS_PER_SEC;
+  interpolation += anim_speed * (now - then);
+  Animate(start, end, &interpolation);
+}
+
+void Mesh::UpdateVertexData(Vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m) {
+  // Delete old buffers
+  glDeleteBuffers(N_BUFFERS, vertex_buffers);
+  glDeleteVertexArrays(1, &vertex_buffer_object);
+
+  // Create a new buffer with the updated vertex data
+  IndexedModel model;
+  for(unsigned int i = 0; i < vcount; i++) {
+    model.positions.push_back(*vp[i].GetPos());
+    model.texCoords.push_back(*vp[i].GetTexCoord());
+    model.normals.push_back(*vp[i].GetNormal());
+  }
+  for(unsigned int i = 0; i < nidx; i++) {
+    model.indices.push_back(idx[i]);
+  }
+  mode = m;
+  InitMesh(model);
 }
 
 void Mesh::InitMesh(const IndexedModel& model) {

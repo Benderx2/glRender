@@ -5,8 +5,12 @@
 #include <shader.h>
 
 typedef enum {
+
   ENGINE_3D,
-  ENGINE_2D
+  ENGINE_2D,
+  ENGINE_TRIANGLES,
+  ENGINE_WIREFRAME
+
 } engine_mode;
 
 inline void internal_engine3d(Display& dp) {
@@ -55,4 +59,10 @@ inline void EngineSetMode(Display& dp, engine_mode mode) {
   }
 }
 
+inline void EngineSetRender(engine_mode mode) {
+  if(mode == ENGINE_TRIANGLES)
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  else if(mode == ENGINE_WIREFRAME)
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+}
 #endif

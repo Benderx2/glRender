@@ -64,6 +64,7 @@ Display::Display(int w, int h, const std::string& title) {
   aspect = (float)width/(float)height;
   frames = 0;
   t_start = Ticks();
+  
 }
 
 Display::~Display() {

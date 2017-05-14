@@ -48,6 +48,7 @@ public:
   inline void SetProperty(void(*pdraw)(Mesh*, Shader*, Texture*, Transform*)) {
     predraw = pdraw;
   }
+
   inline Texture* GetTexture() { return obj_tex; }
   inline Shader* GetShader() { return obj_shdr; }
   inline Mesh* GetMesh() { return obj_msh; }
@@ -57,7 +58,6 @@ public:
   void Draw(const Camera& cam);
 
 private:
-
   // Transformations
   Transform* obj_trans;
   // Object meshses, shaders and textures
