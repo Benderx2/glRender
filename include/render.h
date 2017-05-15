@@ -2,9 +2,9 @@
 #define render_h
 
 // glRender include file..
-// Version 0.4
+// Version 0.45
 #define glRender_version_major 0
-#define glRender_version_minor 4
+#define glRender_version_minor 45
 
 #include <display.h>
 #include <engine.h>

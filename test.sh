@@ -1,2 +1,3 @@
 #!/bin/sh
-cd bin && ./example01
+cd bin && ./example3d
+./example2d

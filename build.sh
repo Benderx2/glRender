@@ -33,11 +33,8 @@ printf "Public domain STB_IMAGE implementation...\n"
 $CPP $CPPFLAGS src/stb_image.c -o stb_image.o
 printf "Creating static library...\n"
 $AR $ARFLAGS ./lib/glRender.a display.o shader.o mesh.o texture.o gameobject.o obj.o stb_image.o scene.o text.o md2.o primitives.o skybox.o
-printf "Compiling example...\n"
-$CPP $CPPFLAGS ./examples/example01.cpp -o example01.o
-$CPP example01.o -o ./bin/example01 $LDFLAGS
 
-printf "Finished"
+printf "Finished\n"
 COMPILE_END_TIME=$(date +%s.%N)
 
 TOTAL_TIME_TAKEN=$(echo "$COMPILE_END_TIME - $COMPILE_START_TIME" | bc)

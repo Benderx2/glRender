@@ -91,9 +91,12 @@ void Mesh::SetFrameInterpolation(int n, int n2, float interp) {
   UpdateVertexData(&model.vertices[0], model.vertices.size(), &model.indices[0], model.indices.size(), mode);
 }
 
-void Mesh::Animate(int start, int end, float* interp) {
+// Returns 1 if end is reached, 0 if not reached
+int Mesh::Animate(int start, int end, float* interp) {
+  int retval = 0;
+
   if(type != MESH_MD2)
-    return;
+    return retval;
 
   if(current_frame < start || current_frame > end) {
     current_frame = start;
@@ -113,25 +116,27 @@ void Mesh::Animate(int start, int end, float* interp) {
     if(current_frame <= end)
       next_frame = current_frame + 1;
   }
-
-  // For smooth transition between last and first frame
-  if(current_frame >= end)
+  // For smooth transition between last and first framestart
+  if(current_frame >= end) {
     next_frame = start;
+    // We reached last frame, now tell the caller exactly that.
+    retval = 1;
+  }
 
   SetFrameInterpolation(current_frame, next_frame, *interp);
+  return retval;
 }
 
-// This must be called every cycle
-void Mesh::CycleAnimation(void) {
+// These must be called every cycle
+int Mesh::CycleAnimation(void) {
   if(type != MESH_MD2)
-    return;
+    return 0;
 
   then = now;
   now = (float)clock() / CLOCKS_PER_SEC;
   interpolation += anim_speed * (now - then);
-  Animate(current_anim.start, current_anim.end, &interpolation);
+  return Animate(current_anim.start, current_anim.end, &interpolation);
 }
-
 // Preferred to call this before, not every cycle as it uses string functions
 void Mesh::SetAnimation(const std::string& anim_name) {
   if(type != MESH_MD2)

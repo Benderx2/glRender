@@ -26,10 +26,10 @@ public:
 
   void SetFrame(int);
   void SetFrameInterpolation(int, int, float);
-  void Animate(int start, int end, float* interp);
+  int Animate(int start, int end, float* interp);
 
   void SetAnimation(const std::string&);
-  void CycleAnimation(void);
+  int CycleAnimation(void);
 
   void UpdateVertexData(Vertex*, unsigned int, unsigned int*, unsigned int, GLenum);
   void Draw(void);
