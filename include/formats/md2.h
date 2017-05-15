@@ -69,11 +69,26 @@ public:
   std::vector<unsigned int> indices;
 };
 
+class MD2Anim {
+public:
+
+  inline MD2Anim() {
+    start = -1;
+    end = -1;
+  }
+
+public:
+  int start;
+  int end;
+  std::string name;
+};
+
 class MD2Loader {
 public:
   MD2Loader(const std::string&);
 
   MD2Model GetFrameData(int n);
+  MD2Anim GetAnimationData(const std::string&);
 
   inline md2_header_t* GetHeader(void) {
     return &header;

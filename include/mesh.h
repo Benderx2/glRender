@@ -25,10 +25,11 @@ public:
   Mesh();
 
   void SetFrame(int);
-  void SetFrameInterpolation(int, float);
+  void SetFrameInterpolation(int, int, float);
   void Animate(int start, int end, float* interp);
 
-  void CycleAnimation(int start, int end);
+  void SetAnimation(const std::string&);
+  void CycleAnimation(void);
 
   void UpdateVertexData(Vertex*, unsigned int, unsigned int*, unsigned int, GLenum);
   void Draw(void);
@@ -59,11 +60,13 @@ private:
   // MD2 Extras
   MD2Loader* md2_loader;
   // For animations...
-  unsigned int current_frame;
+  int current_frame;
+  int next_frame;
   double then;
   double now;
   double anim_speed;
   float interpolation;
+  MD2Anim current_anim;
   void InitMesh(const IndexedModel& model);
 };
 #endif

@@ -67,7 +67,7 @@ void Mesh::SetFrame(int n) {
   UpdateVertexData(&model.vertices[0], model.vertices.size(), &model.indices[0], model.indices.size(), mode);
 }
 // MD2 Animation
-void Mesh::SetFrameInterpolation(int n, float interp) {
+void Mesh::SetFrameInterpolation(int n, int n2, float interp) {
   if(type != MESH_MD2)
     return;
 
@@ -76,7 +76,7 @@ void Mesh::SetFrameInterpolation(int n, float interp) {
 
 
   MD2Model model = md2_loader->GetFrameData(n);
-  MD2Model next_model = md2_loader->GetFrameData(n+1);
+  MD2Model next_model = md2_loader->GetFrameData(n2);
 
   for(int i = 0; i < model.vertices.size(); i++) {
     // Interpolate vertices and normals
@@ -95,25 +95,53 @@ void Mesh::Animate(int start, int end, float* interp) {
   if(type != MESH_MD2)
     return;
 
-  if(current_frame < start || current_frame > end)
+  if(current_frame < start || current_frame > end) {
     current_frame = start;
+    next_frame = current_frame + 1;
+  }
 
   if(*interp >= 1.0f) {
     *interp = 0.0f;
-    current_frame++;
+    if(current_frame <= end)
+      current_frame++;
+
+    if(next_frame == start) {
+      current_frame = start;
+      next_frame = current_frame + 1;
+    }
+
+    if(current_frame <= end)
+      next_frame = current_frame + 1;
   }
 
-  if(current_frame > end)
-    current_frame = start;
+  // For smooth transition between last and first frame
+  if(current_frame >= end)
+    next_frame = start;
 
-  SetFrameInterpolation(current_frame, *interp);
+  SetFrameInterpolation(current_frame, next_frame, *interp);
 }
 
-void Mesh::CycleAnimation(int start, int end) {
+// This must be called every cycle
+void Mesh::CycleAnimation(void) {
+  if(type != MESH_MD2)
+    return;
+
   then = now;
   now = (float)clock() / CLOCKS_PER_SEC;
   interpolation += anim_speed * (now - then);
-  Animate(start, end, &interpolation);
+  Animate(current_anim.start, current_anim.end, &interpolation);
+}
+
+// Preferred to call this before, not every cycle as it uses string functions
+void Mesh::SetAnimation(const std::string& anim_name) {
+  if(type != MESH_MD2)
+    return;
+
+  MD2Anim new_anim = md2_loader->GetAnimationData(anim_name);
+  current_anim.start = new_anim.start;
+  current_anim.end = new_anim.end;
+  current_anim.name = new_anim.name;
+  SetFrame(current_anim.start);
 }
 
 void Mesh::UpdateVertexData(Vertex* vp, unsigned int vcount, unsigned int* idx, unsigned int nidx, GLenum m) {

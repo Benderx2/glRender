@@ -7,7 +7,6 @@ vector3 md2_normals_table[162] {
 
 MD2Loader::MD2Loader(const std::string& file) {
   FILE* fp;
-  std::cout << "Loading MD2 file: " << file << std::endl;
 
   fp = fopen(file.c_str(), "rb");
   if(fp == NULL) {
@@ -86,6 +85,49 @@ MD2Model MD2Loader::GetFrameData(int n) {
   }
   return model;
 }
+
+MD2Anim MD2Loader::GetAnimationData(const std::string& anim_name) {
+  MD2Anim anim_info;
+  std::string frame_name, last_frame_name = "";
+  bool found_frame = false;
+  int frame_num = 0;
+
+  for(int i = 0; i < header.n_frames; i++) {
+    if(found_frame)
+        last_frame_name = frame_name;
+
+    frame_name = (const char*)frames[i].name;
+
+    for(unsigned int j = 0; j < frame_name.length(); j++) {
+      // Check if this has a digit
+      if(isdigit(frame_name[j]) && j >= frame_name.length() - 2) {
+        frame_name.erase(j, frame_name.length() - j);
+        break;
+      }
+    }
+
+    if(frame_name == anim_name && found_frame == false) {
+      // this is the first frame
+      anim_info.start = i;
+      found_frame = true;
+    }
+
+    if(found_frame) {
+      if(last_frame_name != frame_name)
+        if(last_frame_name != "") {
+          anim_info.name = frame_name;
+          anim_info.end = i - 2;
+          return anim_info;
+        }
+    }
+  }
+
+  if(found_frame == false)
+    std::cout << "warning: cannot find frame: '" << anim_name << "'" << std::endl;
+
+  return anim_info;
+}
+
 MD2Loader::~MD2Loader() {
   for(int i = 0; i < header.n_frames; i++) {
     delete frames[i].vertices;

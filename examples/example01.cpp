@@ -26,8 +26,8 @@ int main(void) {
   // Also our "predraw" function which is called every frame before drawing..
   GameObject terrain("obj_terrain", new Mesh("data/terrain.obj", MESH_OBJ), new Texture("data/grass.jpg"), new Shader("shaders/shader_lambert", true), new Transform(), predraw);
   GameObject knight("obj_knight", new Mesh("data/knight.md2", MESH_MD2), new Texture("data/knight.jpg"), new Shader("shaders/shader_basic", true), new Transform(), NULL);
-
-  knight.GetMesh()->SetFrame(0);
+  // Set Animation to stand animation
+  knight.GetMesh()->SetAnimation("run");
   knight.GetTransform()->SetScale(0.01f, 0.01f, 0.01f);
   knight.GetTransform()->SetTranslation(0.0f, 0.0f, 2.2f);
   knight.GetTransform()->SetRotation(-1.6f, -0.5f, 0.0f);
@@ -60,9 +60,9 @@ int main(void) {
     // 3D Drawing Code goes here..
     // Draw our scene
     if(start_rendering == true) {
-      // Cycle between 0 and 35 frames
+      // Cycle the animation
       knight.GetMesh()->SetAnimationSpeed(60);
-      knight.GetMesh()->CycleAnimation(0, 100);
+      knight.GetMesh()->CycleAnimation();
       my_scene.Draw();
     }
     // Switch to 2D rendering mode now
