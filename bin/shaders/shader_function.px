@@ -1,0 +1,9 @@
+#version 120
+
+uniform sampler2D diffuse;
+
+varying vec3 position_dev;
+
+void main() {
+  gl_FragColor = vec4(clamp(position_dev.x, position_dev.y, position_dev.z, 1.0f);
+}

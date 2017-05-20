@@ -16,7 +16,6 @@ int main(void) {
   screen.GrabCursor(true);
 
   Camera cam(vector3(0.0f,0.0f,3.0f), vector3(0.0f,0.0f,-1.0f), vector3(0,1.0f,0), 70.0f, screen.GetAspect(), 0.01f, 1000.0f);
-  cam.Rotate(CAMERA_LEFT, 90.0f);
   // Our glrender logo
   Texture tex_logo("data/glrender.png");
   // Load up a basic textrenderer

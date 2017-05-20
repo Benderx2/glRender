@@ -1,0 +1,17 @@
+#version 120
+// Used for shading plots...
+
+attribute vec3 position;
+attribute vec2 texCoord;
+attribute vec3 normal;
+
+uniform mat4 transform;
+uniform vec3 position_avg;
+
+varying vec3 position_dev;
+
+void main() {
+  gl_Position = transform * vec4(position, 1.0f);
+  // Return deviation from mean position
+  position_dev = normalize(abs(position - position_avg));
+}
