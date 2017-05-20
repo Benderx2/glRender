@@ -29,10 +29,12 @@ printf "Scene Module...\n"
 $CPP $CPPFLAGS src/scene.cpp -o scene.o
 printf "Text module...\n"
 $CPP $CPPFLAGS src/text.cpp -o text.o
+printf "Camera module...\n"
+$CPP $CPPFLAGS src/camera.cpp -o camera.o
 printf "Public domain STB_IMAGE implementation...\n"
 $CPP $CPPFLAGS src/stb_image.c -o stb_image.o
 printf "Creating static library...\n"
-$AR $ARFLAGS ./lib/glRender.a display.o shader.o mesh.o texture.o gameobject.o obj.o stb_image.o scene.o text.o md2.o primitives.o skybox.o
+$AR $ARFLAGS ./lib/glRender.a display.o shader.o mesh.o texture.o camera.o gameobject.o obj.o stb_image.o scene.o text.o md2.o primitives.o skybox.o
 
 printf "Finished\n"
 COMPILE_END_TIME=$(date +%s.%N)

@@ -68,6 +68,7 @@ Display::Display(int w, int h, const std::string& title) {
 }
 
 Display::~Display() {
+  GrabCursor(false);
   SDL_GL_DeleteContext(gl_Context);
   SDL_DestroyWindow(gl_Window);
   SDL_Quit();
@@ -97,6 +98,7 @@ unsigned int* Display::GetMouseXY(void) {
 }
 
 void Display::Update(void) {
+  int prev_mouse_x, prev_mouse_y;
 // Calculate FPS
   CalculateFPS();
   SDL_Event event;
@@ -156,6 +158,8 @@ void Display::Update(void) {
           break;
       }
     } else if(event.type == SDL_MOUSEMOTION) {
+      prev_mouse_x = mouse_x;
+      prev_mouse_y = mouse_y;
       mouse_x = event.motion.x;
       mouse_y = event.motion.y;
       mouse_moved = true;
@@ -180,7 +184,10 @@ void Display::Update(void) {
     if(k_right == true) current_controller->CallProcess(CONTROLLER_RIGHT, 0.0f, 0.0f);
     if(k_z == true) current_controller->CallProcess(CONTROLLER_Z, 0.0f, 0.0f);
     if(k_x == true) current_controller->CallProcess(CONTROLLER_X, 0.0f, 0.0f);
-    if(mouse_moved == true) current_controller->CallProcess(CONTROLLER_MOUSE, mouse_x, mouse_y);
+    if(mouse_moved == true) {
+      current_controller->CallProcess(CONTROLLER_MOUSE, mouse_x, mouse_y);
+      current_controller->CallProcess(CONTROLLER_MOUSE_REL, mouse_x - prev_mouse_x, mouse_y - prev_mouse_y);
+    }
   }
 }
 unsigned int Display::GetWidth(void) {
@@ -209,9 +216,15 @@ void Display::Culling(bool toggle) {
 void Display::RegisterController(Controller* ctrl) {
   current_controller = ctrl;
 }
+
 void Display::SetMouse(int x, int y) {
   SDL_WarpMouseInWindow(gl_Window, x, y);
 }
+
+void Display::GrabCursor(bool grab) {
+  SDL_SetRelativeMouseMode(grab ? SDL_TRUE : SDL_FALSE);
+}
+
 void Display::CalculateFPS(void) {
   t_end = Ticks();
   frames += 1;

@@ -13,9 +13,10 @@ int main(void) {
 
   screen.Culling(true);
   screen.SetMouse(screen.GetWidth()/2, screen.GetHeight()/2);
+  screen.GrabCursor(true);
 
-  Camera cam(vector3(0,0,3), vector3(0,0,-1), vector3(0,1,0), 70.0f, screen.GetAspect(), 0.01f, 1000.0f);
-
+  Camera cam(vector3(0.0f,0.0f,3.0f), vector3(0.0f,0.0f,-1.0f), vector3(0,1.0f,0), 70.0f, screen.GetAspect(), 0.01f, 1000.0f);
+  cam.Rotate(CAMERA_LEFT, 90.0f);
   // Our glrender logo
   Texture tex_logo("data/glrender.png");
   // Load up a basic textrenderer
@@ -68,7 +69,7 @@ int main(void) {
     EngineSetMode(screen, ENGINE_2D);
     // 2D Drawing Code goes here...
     if(start_rendering == false)
-      text.Render("Press Z to start rendering. Use arrow keys to rotate.", 150, 200, 1.0f);
+      text.Render("Press Z to start rendering. Use arrow keys to move. ALT+F4 to quit.", 120, 200, 1.0f);
     else
       text.Render("FPS: " + std::to_string(screen.GetFPS()), 0, 0, 1.0f);
     // Render our logo!
@@ -86,19 +87,21 @@ void predraw(Mesh* msh, Shader* shdr, Texture* tex, Transform* t) {
   shdr->SetUniform("lightdir", vector3(0,-1,0));
 }
 
-void controller_process(Scene* s, controller_key k, float x, float y) {
+void controller_process(Scene* s, controller_key k, float mouse_x, float mouse_y) {
   GameObject* obj01 = s->GetObjectPointer("obj_knight");
+  Camera* cam_ptr = s->GetCameraPointer();
+
   if(k == CONTROLLER_LEFT) {
-    obj01->GetTransform()->GetRotation().y -= 0.1f;
+    cam_ptr->Move(CAMERA_LEFT, 0.2f);
   }
   if(k == CONTROLLER_RIGHT) {
-    obj01->GetTransform()->GetRotation().y += 0.1f;
+    cam_ptr->Move(CAMERA_RIGHT, 0.2f);
   }
   if(k == CONTROLLER_UP) {
-    obj01->GetTransform()->GetRotation().x -= 0.1f;
+    cam_ptr->Move(CAMERA_FRONT, 0.2f);
   }
   if(k == CONTROLLER_DOWN) {
-    obj01->GetTransform()->GetRotation().x += 0.1f;
+    cam_ptr->Move(CAMERA_BACK, 0.2f);
   }
   if(k == CONTROLLER_Z) {
     start_rendering = true;

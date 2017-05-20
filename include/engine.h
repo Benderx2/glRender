@@ -9,7 +9,8 @@ typedef enum {
   ENGINE_3D,
   ENGINE_2D,
   ENGINE_TRIANGLES,
-  ENGINE_WIREFRAME
+  ENGINE_WIREFRAME,
+  ENGINE_VERTICES
 
 } engine_mode;
 
@@ -64,5 +65,7 @@ inline void EngineSetRender(engine_mode mode) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   else if(mode == ENGINE_WIREFRAME)
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  else if(mode == ENGINE_VERTICES)
+    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 }
 #endif

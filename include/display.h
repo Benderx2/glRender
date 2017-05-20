@@ -73,7 +73,7 @@ public:
 
   void RegisterController(Controller* ctrl);
   void SetMouse(int x, int y);
-
+  void GrabCursor(bool grab);
   virtual ~Display();
 
 private:

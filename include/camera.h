@@ -1,48 +1,49 @@
 #ifndef camera_h
 #define camera_h
 
+#include <iostream>
 #include <render_type.h>
+
+typedef enum {
+
+  CAMERA_FRONT,
+  CAMERA_LEFT,
+  CAMERA_RIGHT,
+  CAMERA_BACK,
+  CAMERA_UP,
+  CAMERA_DOWN
+
+} cam_direction;
 
 class Camera {
 public:
-  Camera(const vector3& pos, const vector3& forward, const vector3& up, float fov, float aspect, float znear, float zfar) {
-    matrix_perspective = glm::perspective(fov, aspect, znear, zfar);
-    v_pos = pos;
-    v_forward = forward;
-    v_up = up;
-  }
-  inline vector3 GetPos(void) const {
-    return v_pos;
-  }
-  inline vector3 GetForward(void) const {
-    return v_forward;
-  }
-  inline vector3 GetUp(void) const {
-    return v_up;
-  }
-  inline void SetPos(const vector3& pos) {
-    v_pos = pos;
-  }
-  inline void SetForward(const vector3& forward) {
-    v_forward = forward;
-  }
-  inline void SetUp(const vector3& up) {
-    v_up = up;
-  }
-  // Now, the following functions define the way we can move and rotate our camera
-  inline void SetProjection(float xf, float yf, float zf, float xt, float yt, float zt, float xu, float yu, float zu) {
-    v_pos.x = xf; v_pos.y = yf; v_pos.z = zf;
-    v_forward.x = xt; v_forward.y = yt; v_forward.z = zt;
-    v_up.x = xu; v_up.y = yu; v_up.z = zu;
-  }
-  inline matrix4 GetMatrix(void) const {
-    // Return View * Projection Matrix
-    return matrix_perspective * glm::lookAt(v_pos, v_forward, v_up);
-  }
+  Camera(const vector3& pos, const vector3& forward, const vector3& up, float fov, float aspect, float znear, float zfar, float y=-90.0f, float p=0.0f);
+
+  vector3 GetPos(void) const;
+  vector3 GetForward(void) const;
+  vector3 GetUp(void) const;
+  float GetYaw(void);
+  float GetPitch(void);
+
+  void SetPos(const vector3& pos);
+  void SetForward(const vector3& forward);
+  void SetYawPitch(float y, float p);
+  void SetUp(const vector3& up);
+
+  void Move(cam_direction dir, float speed);
+  void Rotate(cam_direction dir, float angle);
+
+  matrix4 GetMatrix(void) const;
+
 private:
   matrix4 matrix_perspective;
+
   vector3 v_pos;
   vector3 v_forward;
   vector3 v_up;
+
+  float yaw, pitch;
+
+  void CalcFront(void);
 };
 #endif
