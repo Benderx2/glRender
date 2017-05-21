@@ -15,7 +15,7 @@ int main(void) {
   screen.SetMouse(screen.GetWidth()/2, screen.GetHeight()/2);
   screen.GrabCursor(true);
 
-  Camera cam(vector3(0.0f,0.0f,3.0f), vector3(0.0f,0.0f,-1.0f), vector3(0,1.0f,0), 70.0f, screen.GetAspect(), 0.01f, 1000.0f);
+  Camera cam(vector3(0.1f,0.0f,3.0f), vector3(0.0f,0.0f,-1.0f), vector3(0,1.0f,0), 70.0f, screen.GetAspect(), 0.01f, 1000.0f);
   // Our glrender logo
   Texture tex_logo("data/glrender.png");
   // Load up a basic textrenderer
@@ -26,21 +26,31 @@ int main(void) {
   // Also our "predraw" function which is called every frame before drawing..
   GameObject terrain("obj_terrain", new Mesh("data/terrain.obj", MESH_OBJ), new Texture("data/grass.jpg"), new Shader("shaders/shader_lambert", true), new Transform(), predraw);
   GameObject knight("obj_knight", new Mesh("data/knight.md2", MESH_MD2), new Texture("data/knight.jpg"), new Shader("shaders/shader_basic", true), new Transform(), NULL);
+  GameObject sydney("obj_sydney", new Mesh("data/sydney.md2", MESH_MD2), new Texture("data/sydney.bmp"), new Shader("shaders/shader_basic", true), new Transform(), NULL);
   // Set Animation to stand animation
   knight.GetMesh()->SetAnimation("stand");
+  knight.GetMesh()->SetAnimationSpeed(60);
+  // Transform so as to bring it to the center
   knight.GetTransform()->SetScale(0.01f, 0.01f, 0.01f);
-  knight.GetTransform()->SetTranslation(0.0f, 0.0f, 2.2f);
-  knight.GetTransform()->SetRotation(-1.6f, -0.5f, 0.0f);
+  knight.GetTransform()->SetTranslation(0.0f, -0.1f, 2.1f);
+  knight.GetTransform()->SetRotation(-1.6f, -1.0f, 0.0f);
+  // Do that for sydney too
+  sydney.GetMesh()->SetAnimation("stand");
+  sydney.GetMesh()->SetAnimationSpeed(60);
+  sydney.GetTransform()->SetScale(0.01f, 0.01f, 0.01f);
+  sydney.GetTransform()->SetTranslation(0.3f, -0.1f, 2.1f);
+  sydney.GetTransform()->SetRotation(-1.6f, -1.0f, 0.0f);
 
   terrain.GetTransform()->SetScale(0.5f, 0.5f, 0.5f);
   terrain.GetTransform()->SetTranslation(0.0f, -0.5f, 1.0f);
   // Create skybox
   Skybox sky("shaders/shader_sky", "data/sky/siege_rt.tga", "data/sky/siege_lf.tga", "data/sky/siege_up.tga", "data/sky/siege_dn.tga", "data/sky/siege_bk.tga", "data/sky/siege_ft.tga", 10.0f);
   // Create a scene with 1 object
-  Scene my_scene(2);
-  // Add the camera and the only object and the skybox
+  Scene my_scene(3);
+  // Add the camera and the objects and the skybox
   my_scene.AddCamera(&cam);
   my_scene.AddObject(&knight);
+  my_scene.AddObject(&sydney);
   my_scene.AddObject(&terrain);
   my_scene.AddSky(&sky);
   // Create a controller for the scene
@@ -59,9 +69,9 @@ int main(void) {
     // 3D Drawing Code goes here..
     // Draw our scene
     if(start_rendering == true) {
-      // Cycle the animation
-      knight.GetMesh()->SetAnimationSpeed(60);
+      // Cycle the animations
       knight.GetMesh()->CycleAnimation();
+      sydney.GetMesh()->CycleAnimation();
       my_scene.Draw();
     }
     // Switch to 2D rendering mode now
