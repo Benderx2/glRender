@@ -19,6 +19,7 @@
 #include <controller.h>
 #include <primitives.h>
 #include <skybox.h>
+#include <collider.h>
 #include <render_type.h>
 #include <render_constant.h>
 

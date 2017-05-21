@@ -14,7 +14,8 @@
 typedef enum {
 
   MESH_OBJ,
-  MESH_MD2
+  MESH_MD2,
+  MESH_STATIC
 
 } model_type;
 
@@ -49,7 +50,7 @@ private:
     NORMAL_VB,
     N_BUFFERS
   };
-  model_type type;
+  model_type type = MESH_STATIC;
 
   GLenum mode;
   GLuint vertex_buffer_object;
@@ -67,6 +68,7 @@ private:
   double anim_speed;
   float interpolation;
   MD2Anim current_anim;
+
   void InitMesh(const IndexedModel& model);
 };
 #endif

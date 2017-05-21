@@ -8,8 +8,10 @@ class Plot {
   Plot(const std::string& function, vector2& min, vector2& max, vector2& step);
 
 private:
-  // Vertices
+  // Vertices (as quads)
   std::vector<vector3> v;
+  int grid_w;
+  int grid_h;
 };
 
 #endif
